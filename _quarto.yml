@@ -1,0 +1,48 @@
+project:
+  type: website
+  title: "Structured intelligence governance"
+  output-dir: docs
+
+website:
+  title: "Good enough data & systems lab"
+  description: "Structured intelligence governance"
+  site-url: https://softloud.github.io/sig-consulting
+  repo-url: https://github.com/softloud/sig-consulting
+  repo-actions: [edit, issue]
+  navbar:
+    left:
+      - text: "Home"
+        href: index.qmd
+      - text: "Analysis"
+        href: sig.qmd
+      - text: "Documentation"
+        href: README.md
+    right:
+      - icon: github
+        href: https://github.com/softloud/sig-consulting
+        aria-label: GitHub
+  sidebar:
+    style: "floating"
+    search: true
+  page-footer:
+    left: "© 2025 Good enough data & systems lab"
+    right: 
+      - icon: github
+        href: https://github.com/softloud/sig-consulting
+        aria-label: GitHub
+
+format:
+  html:
+    theme: cosmo
+    css: styles.css
+    toc: true
+    code-fold: true
+    grid:
+      sidebar-width: 300px
+      body-width: 900px
+      margin-width: 200px
+
+execute: 
+  error: true
+  warning: false
+  message: false

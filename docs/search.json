@@ -1,0 +1,359 @@
+[
+  {
+    "objectID": "SECURITY_UPDATE.html",
+    "href": "SECURITY_UPDATE.html",
+    "title": "Security Update: Credentials Removed",
+    "section": "",
+    "text": "All credential printing has been removed from the SIG system to protect sensitive information.\n\n\n\nGoogle Sheets CSV URLs:\n\nBefore: print(f\"Reading from: {csv_url}\")\nAfter: # Note: Reading from Google Sheets CSV export\n\nDATA_ENTRY Environment Variable References:\n\nBefore: print(\"Using sample data - set DATA_ENTRY environment variable or pass data_path/sheet_id\")\nAfter: print(\"Using sample data - configure your data source or pass data_path/sheet_id\")\n\nData Source URLs in get_data_source_info():\n\nBefore: 'url': data_entry_url (exposed full URL)\nAfter: 'url': '[CONFIGURED]' (anonymized)\n\nEnvironment Variable Instructions:\n\nBefore: 'Configure DATA_ENTRY in client_credentials/.env'\nAfter: 'Configure data source in environment'\n\n\n\n\n\n\nNo URL exposure: Google Sheets URLs are never printed or returned\nNo environment variable names: Doesn’t reveal specific config variable names\nAnonymous data source info: Shows type and status without exposing paths\nClean error messages: Helpful without revealing credentials\n\n\n\n\n\nData loading functions normally\nError handling provides helpful guidance\nData source type detection (google_sheets, web_csv, local_file)\nAccessibility status checking\nAll visualization and analysis features\n\n\n\n\nBefore (insecure):\nReading from: https://docs.google.com/spreadsheets/d/1CduXAP1lUvmm-vGOKdehSp19HwchVsDoq1CLWP5MUvM/export?format=csv&gid=0\nURL: https://docs.google.com/spreadsheets/d/1CduXAP1lUvmm-vGOKdehSp19HwchVsDoq1CLWP5MUvM/edit?usp=sharing\nAfter (secure):\nData source: google_sheets\nURL field: [CONFIGURED] \nType: google_sheets\nThe system now protects all credential information while maintaining full functionality! 🔐"
+  },
+  {
+    "objectID": "SECURITY_UPDATE.html#credential-security-changes",
+    "href": "SECURITY_UPDATE.html#credential-security-changes",
+    "title": "Security Update: Credentials Removed",
+    "section": "",
+    "text": "All credential printing has been removed from the SIG system to protect sensitive information.\n\n\n\nGoogle Sheets CSV URLs:\n\nBefore: print(f\"Reading from: {csv_url}\")\nAfter: # Note: Reading from Google Sheets CSV export\n\nDATA_ENTRY Environment Variable References:\n\nBefore: print(\"Using sample data - set DATA_ENTRY environment variable or pass data_path/sheet_id\")\nAfter: print(\"Using sample data - configure your data source or pass data_path/sheet_id\")\n\nData Source URLs in get_data_source_info():\n\nBefore: 'url': data_entry_url (exposed full URL)\nAfter: 'url': '[CONFIGURED]' (anonymized)\n\nEnvironment Variable Instructions:\n\nBefore: 'Configure DATA_ENTRY in client_credentials/.env'\nAfter: 'Configure data source in environment'\n\n\n\n\n\n\nNo URL exposure: Google Sheets URLs are never printed or returned\nNo environment variable names: Doesn’t reveal specific config variable names\nAnonymous data source info: Shows type and status without exposing paths\nClean error messages: Helpful without revealing credentials\n\n\n\n\n\nData loading functions normally\nError handling provides helpful guidance\nData source type detection (google_sheets, web_csv, local_file)\nAccessibility status checking\nAll visualization and analysis features\n\n\n\n\nBefore (insecure):\nReading from: https://docs.google.com/spreadsheets/d/1CduXAP1lUvmm-vGOKdehSp19HwchVsDoq1CLWP5MUvM/export?format=csv&gid=0\nURL: https://docs.google.com/spreadsheets/d/1CduXAP1lUvmm-vGOKdehSp19HwchVsDoq1CLWP5MUvM/edit?usp=sharing\nAfter (secure):\nData source: google_sheets\nURL field: [CONFIGURED] \nType: google_sheets\nThe system now protects all credential information while maintaining full functionality! 🔐"
+  },
+  {
+    "objectID": "GITHUB_PAGES.html",
+    "href": "GITHUB_PAGES.html",
+    "title": "GitHub Pages Deployment Guide",
+    "section": "",
+    "text": "Your Quarto website is now configured for GitHub Pages deployment! Here are the setup steps and deployment options.\n\n\n\n\n\n\nAdded output-dir: docs to build to the right folder\nAdded site-url and repo-url for proper GitHub Pages integration\nAdded repo-actions for edit/issue links\nAdded footer with GitHub links\n\n\n\n\n\nCreated .github/workflows/deploy-pages.yml\nAutomated deployment on every push to main\nHandles Python dependencies with UV\nUses sample data for public deployment\n\n\n\n\n\nbuild-pages.sh for local testing\nProper environment handling\nError checking and validation\n\n\n\n\n\n\n\n\nPush your code to GitHub:\ngit add .\ngit commit -m \"Configure for GitHub Pages deployment\"\ngit push origin main\nEnable GitHub Actions in your repository:\n\nGo to GitHub Settings &gt; Pages\nSelect “GitHub Actions” as source\nThe workflow will run automatically\n\nYour site will be live at: https://softloud.github.io/sig-consulting\n\n\n\n\n\nBuild locally:\n./build-pages.sh\nPush the docs folder:\ngit add docs/\ngit commit -m \"Build site for GitHub Pages\"\ngit push origin main\nConfigure GitHub Pages:\n\nGo to Settings &gt; Pages\nSelect “Deploy from a branch”\nChoose “main” branch and “/docs” folder\n\n\n\n\n\n\n\n\n# Start development server\nquarto preview\n\n# Or use the dev server script\n./dev-server.sh\n\n\n\n# Test the exact build process\n./build-pages.sh\n\n# Check the built site\ncd docs && python -m http.server 8000\n# Visit: http://localhost:8000\n\n\n\n\n\n\n\nAll credentials are removed from output\nUses sample data for public demos\nEnvironment variables are safely handled\nNo sensitive URLs or keys exposed\n\n\n\n\n\nLocal development: Uses your real Google Sheets data\nPublic deployment: Uses sample data (local-data/sample-google-template.csv)\nGitHub Actions: Automatically creates safe environment\n\n\n\n\n\nhttps://softloud.github.io/sig-consulting/\n├── index.html              # Landing page\n├── sig.html                # Main analysis dashboard  \n├── SIGVIS_GUIDE.html        # Usage documentation\n├── SIG_ARCHITECTURE.html    # Technical architecture\n├── ROLE_SHAPES_GUIDE.html   # Role visualization guide\n└── ...                     # Other documentation\n\n\n\n\n\n\nCheck that all dependencies are in pyproject.toml\nEnsure environment file is created correctly\nVerify Quarto can find Python dependencies\n\n\n\n\n\nCheck GitHub Actions logs in the “Actions” tab\nEnsure Pages is enabled in repository settings\nVerify the workflow has proper permissions\n\n\n\n\n\nEnsure UV is properly handling dependencies\nCheck that the sample data file exists\nVerify import paths are correct\n\n\n\n\n\n\nCustomize your site by editing the Quarto files\nAdd your real data for private development\nShare the public URL with your team\nSet up custom domain (optional) in GitHub Pages settings\n\nYour SIG Consulting website is ready for the world! 🌐"
+  },
+  {
+    "objectID": "GITHUB_PAGES.html#sig-consulting---github-pages-setup",
+    "href": "GITHUB_PAGES.html#sig-consulting---github-pages-setup",
+    "title": "GitHub Pages Deployment Guide",
+    "section": "",
+    "text": "Your Quarto website is now configured for GitHub Pages deployment! Here are the setup steps and deployment options."
+  },
+  {
+    "objectID": "GITHUB_PAGES.html#what-was-configured",
+    "href": "GITHUB_PAGES.html#what-was-configured",
+    "title": "GitHub Pages Deployment Guide",
+    "section": "",
+    "text": "Added output-dir: docs to build to the right folder\nAdded site-url and repo-url for proper GitHub Pages integration\nAdded repo-actions for edit/issue links\nAdded footer with GitHub links\n\n\n\n\n\nCreated .github/workflows/deploy-pages.yml\nAutomated deployment on every push to main\nHandles Python dependencies with UV\nUses sample data for public deployment\n\n\n\n\n\nbuild-pages.sh for local testing\nProper environment handling\nError checking and validation"
+  },
+  {
+    "objectID": "GITHUB_PAGES.html#deployment-options",
+    "href": "GITHUB_PAGES.html#deployment-options",
+    "title": "GitHub Pages Deployment Guide",
+    "section": "",
+    "text": "Push your code to GitHub:\ngit add .\ngit commit -m \"Configure for GitHub Pages deployment\"\ngit push origin main\nEnable GitHub Actions in your repository:\n\nGo to GitHub Settings &gt; Pages\nSelect “GitHub Actions” as source\nThe workflow will run automatically\n\nYour site will be live at: https://softloud.github.io/sig-consulting\n\n\n\n\n\nBuild locally:\n./build-pages.sh\nPush the docs folder:\ngit add docs/\ngit commit -m \"Build site for GitHub Pages\"\ngit push origin main\nConfigure GitHub Pages:\n\nGo to Settings &gt; Pages\nSelect “Deploy from a branch”\nChoose “main” branch and “/docs” folder"
+  },
+  {
+    "objectID": "GITHUB_PAGES.html#local-development",
+    "href": "GITHUB_PAGES.html#local-development",
+    "title": "GitHub Pages Deployment Guide",
+    "section": "",
+    "text": "# Start development server\nquarto preview\n\n# Or use the dev server script\n./dev-server.sh\n\n\n\n# Test the exact build process\n./build-pages.sh\n\n# Check the built site\ncd docs && python -m http.server 8000\n# Visit: http://localhost:8000"
+  },
+  {
+    "objectID": "GITHUB_PAGES.html#security-considerations",
+    "href": "GITHUB_PAGES.html#security-considerations",
+    "title": "GitHub Pages Deployment Guide",
+    "section": "",
+    "text": "All credentials are removed from output\nUses sample data for public demos\nEnvironment variables are safely handled\nNo sensitive URLs or keys exposed\n\n\n\n\n\nLocal development: Uses your real Google Sheets data\nPublic deployment: Uses sample data (local-data/sample-google-template.csv)\nGitHub Actions: Automatically creates safe environment"
+  },
+  {
+    "objectID": "GITHUB_PAGES.html#site-structure",
+    "href": "GITHUB_PAGES.html#site-structure",
+    "title": "GitHub Pages Deployment Guide",
+    "section": "",
+    "text": "https://softloud.github.io/sig-consulting/\n├── index.html              # Landing page\n├── sig.html                # Main analysis dashboard  \n├── SIGVIS_GUIDE.html        # Usage documentation\n├── SIG_ARCHITECTURE.html    # Technical architecture\n├── ROLE_SHAPES_GUIDE.html   # Role visualization guide\n└── ...                     # Other documentation"
+  },
+  {
+    "objectID": "GITHUB_PAGES.html#troubleshooting",
+    "href": "GITHUB_PAGES.html#troubleshooting",
+    "title": "GitHub Pages Deployment Guide",
+    "section": "",
+    "text": "Check that all dependencies are in pyproject.toml\nEnsure environment file is created correctly\nVerify Quarto can find Python dependencies\n\n\n\n\n\nCheck GitHub Actions logs in the “Actions” tab\nEnsure Pages is enabled in repository settings\nVerify the workflow has proper permissions\n\n\n\n\n\nEnsure UV is properly handling dependencies\nCheck that the sample data file exists\nVerify import paths are correct"
+  },
+  {
+    "objectID": "GITHUB_PAGES.html#next-steps",
+    "href": "GITHUB_PAGES.html#next-steps",
+    "title": "GitHub Pages Deployment Guide",
+    "section": "",
+    "text": "Customize your site by editing the Quarto files\nAdd your real data for private development\nShare the public URL with your team\nSet up custom domain (optional) in GitHub Pages settings\n\nYour SIG Consulting website is ready for the world! 🌐"
+  },
+  {
+    "objectID": "SIG_ARCHITECTURE.html",
+    "href": "SIG_ARCHITECTURE.html",
+    "title": "SIG Architecture: Separated Graph and Visualization Logic",
+    "section": "",
+    "text": "The SIG (Structured Intelligence Governance) system has been refactored into two distinct classes to separate concerns:\n\nSigGraph: Handles data loading, graph creation, and analysis logic\nSigVis: Handles visualization and presentation logic\n\n\n\n\n\n\nPurpose: Core graph data and analysis operations\nResponsibilities: - Data loading from various sources (Google Sheets, CSV, local files) - NetworkX graph creation and management - Network analysis and statistics - Cluster analysis and node grouping - Data source configuration and validation\nKey Methods:\n# Data and graph access\n.get_edges_dataframe()          # Raw edge data\n.get_networkx_graph()           # NetworkX graph object\n\n# Analysis methods\n.get_network_stats()            # Basic network statistics\n.get_cluster_summary()          # Cluster distribution analysis\n.get_role_connections()         # Special analysis for 'roles' node\n.get_node_clusters(cluster_by)  # Node-to-cluster mapping\n\n# Configuration\n.get_data_source_info()         # Data source type and status\n\n\n\nPurpose: Visualization and presentation layer\nResponsibilities: - matplotlib-based network plotting - Cluster visualization with colors and legends - Layout algorithms (spring, circular, etc.) - Plot formatting and styling - User interface for analysis results\nKey Methods:\n# Visualization methods\n.plot()                         # Basic network plot\n.plot_clustered(cluster_by)     # Colored cluster visualization\n.plot_by_arrowkeeper()          # Shorthand for arrowkeeper clustering\n\n# Convenience methods (delegates to SigGraph)\n.get_network_stats()           # Network statistics\n.get_cluster_summary()         # Cluster analysis\n.table()                       # Display edge data\n\n\n\n\n\n\n\nData logic is isolated in SigGraph\nVisualization logic is isolated in SigVis\nEach class has a single, clear responsibility\n\n\n\n\n\nCan test graph analysis independently of visualization\nCan test plotting independently of data loading\nEasier to write unit tests for each component\n\n\n\n\n\nSigGraph can be used in non-visual contexts (APIs, batch processing)\nSigVis can be extended with different plot types\nOther visualization libraries could use SigGraph\n\n\n\n\n\nChanges to data loading don’t affect visualization\nChanges to plotting don’t affect analysis\nEasier to debug issues in specific areas\n\n\n\n\n\n\n\nfrom scripts.classes.sig_graph import SigGraph\n\n# For analysis-only applications\ngraph = SigGraph()\nstats = graph.get_network_stats()\nclusters = graph.get_cluster_summary()\nnetworkx_graph = graph.get_networkx_graph()\n\n\n\nfrom scripts.classes.sig_vis import SigVis\n\n# For interactive analysis and visualization\nvis = SigVis()\nvis.plot_clustered(cluster_by='to_parent')\nstats = vis.get_network_stats()  # Delegates to SigGraph\n\n\n\nvis = SigVis()\n\n# These properties provide direct access to SigGraph data\nedges_df = vis.edges      # Same as vis.sig_graph.get_edges_dataframe()\nnx_graph = vis.graph      # Same as vis.sig_graph.get_networkx_graph()\n\n\n\n\n\nExisting code: No changes needed! SigVis maintains the same API\nNew features: Add analysis methods to SigGraph, visualization to SigVis\nData access: Use .edges and .graph properties for direct access\nExtensibility: Inherit from SigGraph for new analysis, SigVis for new plots\n\n\n\n\nscripts/classes/\n├── __init__.py\n├── sig_graph.py          # 🔧 Data and analysis logic\n├── sig_vis.py            # 🎨 Visualization logic  \n└── sig_vis_backup.py     # Backup of original combined class\nThis separation makes the codebase more modular, testable, and maintainable while preserving the existing user interface."
+  },
+  {
+    "objectID": "SIG_ARCHITECTURE.html#overview",
+    "href": "SIG_ARCHITECTURE.html#overview",
+    "title": "SIG Architecture: Separated Graph and Visualization Logic",
+    "section": "",
+    "text": "The SIG (Structured Intelligence Governance) system has been refactored into two distinct classes to separate concerns:\n\nSigGraph: Handles data loading, graph creation, and analysis logic\nSigVis: Handles visualization and presentation logic"
+  },
+  {
+    "objectID": "SIG_ARCHITECTURE.html#class-responsibilities",
+    "href": "SIG_ARCHITECTURE.html#class-responsibilities",
+    "title": "SIG Architecture: Separated Graph and Visualization Logic",
+    "section": "",
+    "text": "Purpose: Core graph data and analysis operations\nResponsibilities: - Data loading from various sources (Google Sheets, CSV, local files) - NetworkX graph creation and management - Network analysis and statistics - Cluster analysis and node grouping - Data source configuration and validation\nKey Methods:\n# Data and graph access\n.get_edges_dataframe()          # Raw edge data\n.get_networkx_graph()           # NetworkX graph object\n\n# Analysis methods\n.get_network_stats()            # Basic network statistics\n.get_cluster_summary()          # Cluster distribution analysis\n.get_role_connections()         # Special analysis for 'roles' node\n.get_node_clusters(cluster_by)  # Node-to-cluster mapping\n\n# Configuration\n.get_data_source_info()         # Data source type and status\n\n\n\nPurpose: Visualization and presentation layer\nResponsibilities: - matplotlib-based network plotting - Cluster visualization with colors and legends - Layout algorithms (spring, circular, etc.) - Plot formatting and styling - User interface for analysis results\nKey Methods:\n# Visualization methods\n.plot()                         # Basic network plot\n.plot_clustered(cluster_by)     # Colored cluster visualization\n.plot_by_arrowkeeper()          # Shorthand for arrowkeeper clustering\n\n# Convenience methods (delegates to SigGraph)\n.get_network_stats()           # Network statistics\n.get_cluster_summary()         # Cluster analysis\n.table()                       # Display edge data"
+  },
+  {
+    "objectID": "SIG_ARCHITECTURE.html#architecture-benefits",
+    "href": "SIG_ARCHITECTURE.html#architecture-benefits",
+    "title": "SIG Architecture: Separated Graph and Visualization Logic",
+    "section": "",
+    "text": "Data logic is isolated in SigGraph\nVisualization logic is isolated in SigVis\nEach class has a single, clear responsibility\n\n\n\n\n\nCan test graph analysis independently of visualization\nCan test plotting independently of data loading\nEasier to write unit tests for each component\n\n\n\n\n\nSigGraph can be used in non-visual contexts (APIs, batch processing)\nSigVis can be extended with different plot types\nOther visualization libraries could use SigGraph\n\n\n\n\n\nChanges to data loading don’t affect visualization\nChanges to plotting don’t affect analysis\nEasier to debug issues in specific areas"
+  },
+  {
+    "objectID": "SIG_ARCHITECTURE.html#usage-patterns",
+    "href": "SIG_ARCHITECTURE.html#usage-patterns",
+    "title": "SIG Architecture: Separated Graph and Visualization Logic",
+    "section": "",
+    "text": "from scripts.classes.sig_graph import SigGraph\n\n# For analysis-only applications\ngraph = SigGraph()\nstats = graph.get_network_stats()\nclusters = graph.get_cluster_summary()\nnetworkx_graph = graph.get_networkx_graph()\n\n\n\nfrom scripts.classes.sig_vis import SigVis\n\n# For interactive analysis and visualization\nvis = SigVis()\nvis.plot_clustered(cluster_by='to_parent')\nstats = vis.get_network_stats()  # Delegates to SigGraph\n\n\n\nvis = SigVis()\n\n# These properties provide direct access to SigGraph data\nedges_df = vis.edges      # Same as vis.sig_graph.get_edges_dataframe()\nnx_graph = vis.graph      # Same as vis.sig_graph.get_networkx_graph()"
+  },
+  {
+    "objectID": "SIG_ARCHITECTURE.html#migration-notes",
+    "href": "SIG_ARCHITECTURE.html#migration-notes",
+    "title": "SIG Architecture: Separated Graph and Visualization Logic",
+    "section": "",
+    "text": "Existing code: No changes needed! SigVis maintains the same API\nNew features: Add analysis methods to SigGraph, visualization to SigVis\nData access: Use .edges and .graph properties for direct access\nExtensibility: Inherit from SigGraph for new analysis, SigVis for new plots"
+  },
+  {
+    "objectID": "SIG_ARCHITECTURE.html#file-structure",
+    "href": "SIG_ARCHITECTURE.html#file-structure",
+    "title": "SIG Architecture: Separated Graph and Visualization Logic",
+    "section": "",
+    "text": "scripts/classes/\n├── __init__.py\n├── sig_graph.py          # 🔧 Data and analysis logic\n├── sig_vis.py            # 🎨 Visualization logic  \n└── sig_vis_backup.py     # Backup of original combined class\nThis separation makes the codebase more modular, testable, and maintainable while preserving the existing user interface."
+  },
+  {
+    "objectID": "sig.html",
+    "href": "sig.html",
+    "title": "Structured intelligence governance template",
+    "section": "",
+    "text": "Blog post - Arrowkeepers, assemble! Designing data systems that care about people"
+  },
+  {
+    "objectID": "sig.html#data-entry",
+    "href": "sig.html#data-entry",
+    "title": "Structured intelligence governance template",
+    "section": "Data entry",
+    "text": "Data entry\n✅ Data loaded successfully: 20 edges 📊 Data source: google_sheet_env"
+  },
+  {
+    "objectID": "sig.html#data-loading-configuration",
+    "href": "sig.html#data-loading-configuration",
+    "title": "Structured intelligence governance template",
+    "section": "Data Loading & Configuration",
+    "text": "Data Loading & Configuration\n\n\nCode\n# Import the SIG visualization system\nfrom scripts.classes.sig_vis import SigVis\nimport warnings\nwarnings.filterwarnings('ignore')\n\n\n# Create SigVis instance - now optimized for your Google template\nsig_vis = SigVis()  # Uses: from, to, from_parent, to_parent, to_minimum_requirements, arrowkeeper\nprint(f\"✅ Data loaded successfully!\")\nprint(f\"📊 Dataset shape: {sig_vis.edges.shape}\")\nprint(f\"📋 Template columns: {list(sig_vis.edges.columns)}\")\n\n\n✅ Data loaded successfully: 20 edges\n✅ Data loaded successfully!\n📊 Dataset shape: (20, 6)\n📋 Template columns: ['from', 'to', 'from_parent', 'to_parent', 'to_minimum_requirements', 'arrowkeeper']"
+  },
+  {
+    "objectID": "sig.html#network-visualizations",
+    "href": "sig.html#network-visualizations",
+    "title": "Structured intelligence governance template",
+    "section": "Network Visualizations",
+    "text": "Network Visualizations\n\nColoured by role relationship\n\nWhere did the system hurt people?\n\n\n\nCode\nsig_vis.plot_with_role_shapes_and_arrowkeeper_lines()\n\n\n\n\n\n\n\n\n\n\n🎯 Visualization Summary:\n  Node shapes: Role connections\n  Node colors: to_parent\n  Edge styles: Arrowkeeper\n\n📊 Arrowkeeper Line Styles:\n  analytics: -\n  scientists: dashed\n  deciders: dotted\n\n\n\n\nMinimum requirements\n\nShow me on the structured intelligence governance plot where the system hurt you or your people in the context of a question you were trying to answer\n\nCharles puts her hand up for whatever tasks people don’t want to do in this.\n\n\nCode\n# Generate clustered network visualization by to_parent\nprint(\"🎨 Generating network clustered by 'to_parent'...\")\nsig_vis.table_min_req()\n\n\n🎨 Generating network clustered by 'to_parent'...\n\n\n\n\n\n\n\n\n\nfrom\nto\nto_parent\nfrom_parent\narrowkeeper\nto_minimum_requirements\n\n\n\n\n0\nfield\ndata\ndata\nroles\nanalytics\neasy data entry\n\n\n1\nanalytics\ndata\ndata\nroles\nanalytics\nNaN\n\n\n2\nprojects\ndeciders\nroles\nprojects\ndeciders\nintraweb team-only access site\n\n\n3\nscientists\nfield\nroles\nroles\nanalytics\nNaN\n\n\n4\ndeciders\npriorities\nprojects\nroles\nanalytics\nNaN\n\n\n5\nreporting\nprojects\nprojects\nreporting\nscientists\nNaN\n\n\n6\nscientists\nprojects\nprojects\nroles\nscientists\nNaN\n\n\n7\nreporting\nprojects\nprojects\nreporting\nscientists\nNaN\n\n\n8\npriorities\nprojects\nprojects\ndeciders\ndeciders\nNaN\n\n\n9\nanalytics\nreporting\nreporting\nanalytics\nanalytics\nNaN\n\n\n10\nscientists\nreporting\nreporting\nroles\nscientists\nNaN\n\n\n11\ntools\nreporting\nreporting\ntools\nanalytics\nNaN\n\n\n12\nanalytics\nroles\nroles\nroles\nanalytics\nNaN\n\n\n13\nscientists\nroles\nroles\nroles\nscientists\nNaN\n\n\n14\ndeciders\nroles\nroles\nroles\ndeciders\nNaN\n\n\n15\nanalytics\nroles\nroles\nroles\nanalytics\nNaN\n\n\n16\nfield\nroles\nroles\nroles\nanalytics\nNaN\n\n\n17\ntools\nscientists\nroles\ntools\nanalytics\nmachine learning project templates\n\n\n18\ndata\nscientists\nroles\ndata\nanalytics\nNaN\n\n\n19\ndata\ntools\ntools\ndata\nanalytics\nNaN"
+  },
+  {
+    "objectID": "sig.html#network-statistics",
+    "href": "sig.html#network-statistics",
+    "title": "Structured intelligence governance template",
+    "section": "Network Statistics",
+    "text": "Network Statistics\n\n\nCode\n# Display comprehensive network statistics\nstats = sig_vis.get_network_stats()\nprint(\"🔍 Network Analysis Summary:\")\nprint(\"=\" * 50)\nfor key, value in stats.items():\n    print(f\"  {key.replace('_', ' ').title()}: {value}\")\n\n\n🔍 Network Analysis Summary:\n==================================================\n  Nodes: 10\n  Edges: 18\n  Density: 0.4\n  Is Connected: True\n  Unique From Nodes: 9\n  Unique To Nodes: 9\n  Unique Clusters To Parent: 5\n  Unique Clusters From Parent: 7\n  Unique Arrowkeepers: 3\n  Average Degree: 3.6"
+  },
+  {
+    "objectID": "sig.html#cluster-analysis",
+    "href": "sig.html#cluster-analysis",
+    "title": "Structured intelligence governance template",
+    "section": "Cluster Analysis",
+    "text": "Cluster Analysis\n\n\nCode\n# Analyze the cluster structure from your Google template\ncluster_summary = sig_vis.get_cluster_summary()\nprint(\"📊 Cluster Distribution:\")\nprint(\"=\" * 30)\n\nfor cluster_type, distribution in cluster_summary.items():\n    print(f\"\\n{cluster_type.replace('_', ' ').title()}:\")\n    for cluster, count in distribution.items():\n        print(f\"  {cluster}: {count} connections\")\n\n\n📊 Cluster Distribution:\n==============================\n\nTo Parent Clusters:\n  roles: 9 connections\n  projects: 5 connections\n  reporting: 3 connections\n  data: 2 connections\n  tools: 1 connections\n\nFrom Parent Clusters:\n  roles: 11 connections\n  reporting: 2 connections\n  data: 2 connections\n  tools: 2 connections\n  projects: 1 connections\n  analytics: 1 connections\n  deciders: 1 connections\n\nArrowkeeper Distribution:\n  analytics: 12 connections\n  scientists: 5 connections\n  deciders: 3 connections"
+  },
+  {
+    "objectID": "sig.html#role-connections-analysis",
+    "href": "sig.html#role-connections-analysis",
+    "title": "Structured intelligence governance template",
+    "section": "Role Connections Analysis",
+    "text": "Role Connections Analysis\n\n\nCode\n# Special analysis for 'roles' connections in your data\nrole_analysis = sig_vis.get_role_connections()\nprint(\"🎯 Role Network Analysis:\")\nprint(\"=\" * 25)\nprint(f\"Total role connections: {role_analysis['total_roles_connections']}\")\nprint(f\"\\nNodes connecting FROM roles: {role_analysis['nodes_connected_from_roles']}\")\nprint(f\"Nodes connecting TO roles: {role_analysis['nodes_connected_to_roles']}\")\n\n\n🎯 Role Network Analysis:\n=========================\nTotal role connections: 5\n\nNodes connecting FROM roles: []\nNodes connecting TO roles: ['analytics', 'scientists', 'deciders', 'analytics', 'field']"
+  },
+  {
+    "objectID": "sig.html#data-table",
+    "href": "sig.html#data-table",
+    "title": "Structured intelligence governance template",
+    "section": "Data Table",
+    "text": "Data Table\nExplore the raw data that powers our network analysis:\n\n\nCode\n# Display the data table\nsig_vis.table()\n\n\n\n\n\n\n\n\n\nfrom\nto\nfrom_parent\nto_parent\nto_minimum_requirements\narrowkeeper\n\n\n\n\n0\nfield\ndata\nroles\ndata\neasy data entry\nanalytics\n\n\n1\nanalytics\ndata\nroles\ndata\nNaN\nanalytics\n\n\n2\nprojects\ndeciders\nprojects\nroles\nintraweb team-only access site\ndeciders\n\n\n3\nscientists\nfield\nroles\nroles\nNaN\nanalytics\n\n\n4\ndeciders\npriorities\nroles\nprojects\nNaN\nanalytics\n\n\n5\nreporting\nprojects\nreporting\nprojects\nNaN\nscientists\n\n\n6\nscientists\nprojects\nroles\nprojects\nNaN\nscientists\n\n\n7\nreporting\nprojects\nreporting\nprojects\nNaN\nscientists\n\n\n8\npriorities\nprojects\ndeciders\nprojects\nNaN\ndeciders\n\n\n9\nanalytics\nreporting\nanalytics\nreporting\nNaN\nanalytics\n\n\n10\nscientists\nreporting\nroles\nreporting\nNaN\nscientists\n\n\n11\ntools\nreporting\ntools\nreporting\nNaN\nanalytics\n\n\n12\nanalytics\nroles\nroles\nroles\nNaN\nanalytics\n\n\n13\nscientists\nroles\nroles\nroles\nNaN\nscientists\n\n\n14\ndeciders\nroles\nroles\nroles\nNaN\ndeciders\n\n\n15\nanalytics\nroles\nroles\nroles\nNaN\nanalytics\n\n\n16\nfield\nroles\nroles\nroles\nNaN\nanalytics\n\n\n17\ntools\nscientists\ntools\nroles\nmachine learning project templates\nanalytics\n\n\n18\ndata\nscientists\ndata\nroles\nNaN\nanalytics\n\n\n19\ndata\ntools\ndata\ntools\nNaN\nanalytics"
+  },
+  {
+    "objectID": "sig.html#network-visualizations-with-role-based-shapes",
+    "href": "sig.html#network-visualizations-with-role-based-shapes",
+    "title": "Structured intelligence governance template",
+    "section": "Network Visualizations with Role-Based Shapes",
+    "text": "Network Visualizations with Role-Based Shapes\n\nNode Shapes by Role Connection\nThis visualization uses different node shapes to indicate how nodes connect to the central “roles” node:\n\n\nCode\n# Generate network visualization with role-based node shapes\nprint(\"🎨 Generating network with role-based shapes...\")\nsig_vis.plot_with_role_shapes(cluster_by='to_parent', figsize=(16, 12))\n\n\n🎨 Generating network with role-based shapes...\n\n\n\n\n\n\n\n\n\n\n🎯 Role Connection Summary:\n  Connects TO roles: ['deciders', 'analytics', 'scientists', 'field']\n  Roles node: ['roles']\n  No role connections: ['priorities', 'tools', 'data', 'reporting', 'projects']\n\n\n\n\nAlternative: Shapes by Role, Colors by Arrowkeeper\n\n\nCode\n# Generate network visualization with role shapes and arrowkeeper colors\nprint(\"🎨 Generating network: shapes by role connections, colors by arrowkeeper...\")\nsig_vis.plot_with_role_shapes(cluster_by='arrowkeeper', figsize=(16, 12))\n\n\n🎨 Generating network: shapes by role connections, colors by arrowkeeper...\n\n\n\n\n\n\n\n\n\n\n🎯 Role Connection Summary:\n  Connects TO roles: ['deciders', 'analytics', 'scientists', 'field']\n  Roles node: ['roles']\n  No role connections: ['priorities', 'tools', 'data', 'reporting', 'projects']\n\n\n\n\nAdvanced: Shapes by Role, Colors by Cluster, Lines by Arrowkeeper\nThis advanced visualization combines all three visual encoding dimensions:"
+  },
+  {
+    "objectID": "sig.html#by-parent",
+    "href": "sig.html#by-parent",
+    "title": "Structured intelligence governance template",
+    "section": "by parent",
+    "text": "by parent\n\n\nCode\n# Generate comprehensive network visualization with all three visual encodings\nprint(\"🎨 Generating advanced network: shapes by role, colors by to_parent, lines by arrowkeeper...\")\nsig_vis.plot_with_role_shapes_and_arrowkeeper_lines(cluster_by='to_parent', figsize=(18, 14))\n\n\n🎨 Generating advanced network: shapes by role, colors by to_parent, lines by arrowkeeper...\n\n\n\n\n\n\n\n\n\n\n🎯 Visualization Summary:\n  Node shapes: Role connections\n  Node colors: to_parent\n  Edge styles: Arrowkeeper\n\n📊 Arrowkeeper Line Styles:\n  analytics: -\n  scientists: dashed\n  deciders: dotted"
+  },
+  {
+    "objectID": "sig.html#by-arrowkeeper",
+    "href": "sig.html#by-arrowkeeper",
+    "title": "Structured intelligence governance template",
+    "section": "by arrowkeeper",
+    "text": "by arrowkeeper\n\n\nCode\n# Alternative: shapes by role, colors by arrowkeeper, lines by arrowkeeper  \nprint(\"🎨 Generating network: shapes by role, colors and lines by arrowkeeper...\")\nsig_vis.plot_with_role_shapes_and_arrowkeeper_lines(cluster_by='arrowkeeper', figsize=(18, 14))\n\n\n🎨 Generating network: shapes by role, colors and lines by arrowkeeper...\n\n\n\n\n\n\n\n\n\n\n🎯 Visualization Summary:\n  Node shapes: Role connections\n  Node colors: arrowkeeper\n  Edge styles: Arrowkeeper\n\n📊 Arrowkeeper Line Styles:\n  analytics: -\n  scientists: dashed\n  deciders: dotted"
+  },
+  {
+    "objectID": "sig.html#summary-insights",
+    "href": "sig.html#summary-insights",
+    "title": "Structured intelligence governance template",
+    "section": "Summary & Insights",
+    "text": "Summary & Insights\nThe network analysis reveals the structure of your data relationships, defined by arrowkeeper roles:\n\nCentral nodes like “roles” act as hubs connecting multiple domains\nCluster analysis shows how different organizational units interact\nArrowkeeper assignments reveal oversight and responsibility patterns\nParent relationships demonstrate hierarchical structures\n\n\nReturn to Home | View Documentation\n```"
+  },
+  {
+    "objectID": "ROLE_SHAPES_GUIDE.html",
+    "href": "ROLE_SHAPES_GUIDE.html",
+    "title": "Role-Based Node Shaping Guide",
+    "section": "",
+    "text": "The SIG visualization system now supports shaping nodes based on their connection to the central “roles” node.\n\n\n\nYour data is analyzed to determine how each node relates to the “roles” node:\n\n\n\nCircle (○): Nodes that connect TO roles\nSquare (□): Nodes that connect FROM roles\n\nDiamond (◊): Nodes that connect both ways with roles\nTriangle (△): The ‘roles’ node itself\nPentagon (⬟): Nodes with no role connections\n\n\n\n\n\nBased on your data: - TO roles: field, deciders, scientists, analytics - Roles node: roles (central hub) - No connections: tools, data, reporting, projects, priorities\n\n\n\n\n\nfrom scripts.classes.sig_vis import SigVis\n\nsig_vis = SigVis()\n\n# Plot with role-based shapes, colored by to_parent\nsig_vis.plot_with_role_shapes()\n\n# Convenience method\nsig_vis.plot_role_shapes()\n\n\n\n# Shape by role connections, color by arrowkeeper\nsig_vis.plot_with_role_shapes(cluster_by='arrowkeeper')\n\n# Shape by role connections, color by from_parent  \nsig_vis.plot_with_role_shapes(cluster_by='from_parent')\n\n# Larger plot with custom sizing\nsig_vis.plot_with_role_shapes(figsize=(16, 12), node_size=2000)\n\n\n\n\n\n\n\nInstantly see which nodes are central to the “roles” system\nIdentify nodes that feed into vs. receive from roles\nSpot nodes operating independently of the role system\n\n\n\n\n\nShape = Role connection type\nColor = Cluster/group assignment\nPosition = Network layout algorithm\n\n\n\n\n\nCombine with different clustering methods\nAdjust layouts for different perspectives\nEasy to identify organizational patterns\n\n\n\n\n\n\nCircle nodes (TO roles): These feed information or resources to the central role system\nSquare nodes (FROM roles): These receive direction or output from roles\nPentagon nodes (No connections): These operate independently or through other pathways\nDiamond nodes (Both directions): These have bidirectional relationships with roles\n\n\n\n\nThe role indicator system: 1. Analyzes your edge data for connections to/from ‘roles’ 2. Categorizes each node based on connection patterns\n3. Maps categories to distinct matplotlib marker shapes 4. Preserves cluster coloring for dual information display\nPerfect for understanding governance and information flow patterns in your structured intelligence system!"
+  },
+  {
+    "objectID": "ROLE_SHAPES_GUIDE.html#new-feature-node-shapes-by-role-connections",
+    "href": "ROLE_SHAPES_GUIDE.html#new-feature-node-shapes-by-role-connections",
+    "title": "Role-Based Node Shaping Guide",
+    "section": "",
+    "text": "The SIG visualization system now supports shaping nodes based on their connection to the central “roles” node."
+  },
+  {
+    "objectID": "ROLE_SHAPES_GUIDE.html#role-connection-types",
+    "href": "ROLE_SHAPES_GUIDE.html#role-connection-types",
+    "title": "Role-Based Node Shaping Guide",
+    "section": "",
+    "text": "Your data is analyzed to determine how each node relates to the “roles” node:\n\n\n\nCircle (○): Nodes that connect TO roles\nSquare (□): Nodes that connect FROM roles\n\nDiamond (◊): Nodes that connect both ways with roles\nTriangle (△): The ‘roles’ node itself\nPentagon (⬟): Nodes with no role connections"
+  },
+  {
+    "objectID": "ROLE_SHAPES_GUIDE.html#current-data-analysis",
+    "href": "ROLE_SHAPES_GUIDE.html#current-data-analysis",
+    "title": "Role-Based Node Shaping Guide",
+    "section": "",
+    "text": "Based on your data: - TO roles: field, deciders, scientists, analytics - Roles node: roles (central hub) - No connections: tools, data, reporting, projects, priorities"
+  },
+  {
+    "objectID": "ROLE_SHAPES_GUIDE.html#usage-methods",
+    "href": "ROLE_SHAPES_GUIDE.html#usage-methods",
+    "title": "Role-Based Node Shaping Guide",
+    "section": "",
+    "text": "from scripts.classes.sig_vis import SigVis\n\nsig_vis = SigVis()\n\n# Plot with role-based shapes, colored by to_parent\nsig_vis.plot_with_role_shapes()\n\n# Convenience method\nsig_vis.plot_role_shapes()\n\n\n\n# Shape by role connections, color by arrowkeeper\nsig_vis.plot_with_role_shapes(cluster_by='arrowkeeper')\n\n# Shape by role connections, color by from_parent  \nsig_vis.plot_with_role_shapes(cluster_by='from_parent')\n\n# Larger plot with custom sizing\nsig_vis.plot_with_role_shapes(figsize=(16, 12), node_size=2000)"
+  },
+  {
+    "objectID": "ROLE_SHAPES_GUIDE.html#analysis-benefits",
+    "href": "ROLE_SHAPES_GUIDE.html#analysis-benefits",
+    "title": "Role-Based Node Shaping Guide",
+    "section": "",
+    "text": "Instantly see which nodes are central to the “roles” system\nIdentify nodes that feed into vs. receive from roles\nSpot nodes operating independently of the role system\n\n\n\n\n\nShape = Role connection type\nColor = Cluster/group assignment\nPosition = Network layout algorithm\n\n\n\n\n\nCombine with different clustering methods\nAdjust layouts for different perspectives\nEasy to identify organizational patterns"
+  },
+  {
+    "objectID": "ROLE_SHAPES_GUIDE.html#example-interpretations",
+    "href": "ROLE_SHAPES_GUIDE.html#example-interpretations",
+    "title": "Role-Based Node Shaping Guide",
+    "section": "",
+    "text": "Circle nodes (TO roles): These feed information or resources to the central role system\nSquare nodes (FROM roles): These receive direction or output from roles\nPentagon nodes (No connections): These operate independently or through other pathways\nDiamond nodes (Both directions): These have bidirectional relationships with roles"
+  },
+  {
+    "objectID": "ROLE_SHAPES_GUIDE.html#technical-details",
+    "href": "ROLE_SHAPES_GUIDE.html#technical-details",
+    "title": "Role-Based Node Shaping Guide",
+    "section": "",
+    "text": "The role indicator system: 1. Analyzes your edge data for connections to/from ‘roles’ 2. Categorizes each node based on connection patterns\n3. Maps categories to distinct matplotlib marker shapes 4. Preserves cluster coloring for dual information display\nPerfect for understanding governance and information flow patterns in your structured intelligence system!"
+  },
+  {
+    "objectID": "index.html",
+    "href": "index.html",
+    "title": "Structured intelligence governance template",
+    "section": "",
+    "text": "This platform provides network analysis for understanding how humans interoperate within systems of automata, data, and other humans.\n\n\n\n\n\n\nStructured intelligence governance\n\n\n\nStructured intelligence governance is a collective term for data science methodologies that measure interoperations in a structured intelligence system of humans and automata.\n\n\n\nFeatures\n\nInteractive Network Visualization: Generate dynamic network graphs from your data\nCluster Analysis: Automatically detect and visualize communities in your networks\nGoogle Sheets Integration: Connect directly to your Google Sheets data\nReal-time Data Updates: Sync with live data sources\nExport Capabilities: Save visualizations and analyses\n\n\n\nQuick Start\n\nSet up your data source in the environment configuration\nNavigate to the Analysis Dashboard to start exploring\nUpload or connect your network data\nGenerate visualizations and insights\n\n\n\nData Sources Supported\n\nGoogle Sheets (public or authenticated)\nCSV files (local or remote)\nDirect data upload\n\n\n\nNavigation\n\nAnalysis Dashboard - Main visualization and analysis interface\nDocumentation - Setup and configuration guide\nBlog post - *Arrowkeepers, assemble! Designing data systems that care about people” -\n\n\n\nUse of NLP\n\nCopilot: documentation, devops, light refactoring\nGoogle sheets integration in human testing – apis, coonnectors, some are prompt engineered\nall other integrations have not been human tested yet\n\n\n\nSomething doesn’t work/unclear\n\nCreate ticket\nDebug in real time\n\n\nGet started by visiting the Analysis Dashboard →"
+  },
+  {
+    "objectID": "SIGVIS_GUIDE.html",
+    "href": "SIGVIS_GUIDE.html",
+    "title": "SigVis Quick Reference - Google Template",
+    "section": "",
+    "text": "Your data should have these columns: - from - source node - to - target node - from_parent - cluster/parent of source node - to_parent - cluster/parent of target node\n- to_minimum_requirements - requirements description - arrowkeeper - oversight/responsibility assignment\n\n\n\nfrom scripts.classes.sig_vis import SigVis\n\n# Load data (automatically uses DATA_ENTRY from .env)\nsig_vis = SigVis()\n\n# Basic network plot\nsig_vis.plot()\n\n# Clustered visualizations\nsig_vis.plot_clustered(cluster_by='to_parent')      # Default clustering\nsig_vis.plot_clustered(cluster_by='from_parent')    # Alternative clustering  \nsig_vis.plot_clustered(cluster_by='arrowkeeper')    # By oversight\n# or use shorthand:\nsig_vis.plot_by_arrowkeeper()\n\n# Get statistics\nstats = sig_vis.get_network_stats()\nclusters = sig_vis.get_cluster_summary()\nroles = sig_vis.get_role_connections()\n\n# Display data table\nsig_vis.table()\n\n\n\n\nHardcoded column names - No more auto-detection, uses your specific template\nTemplate-specific methods - Added get_cluster_summary(), get_role_connections(), plot_by_arrowkeeper()\nImproved clustering logic - Better handling of your parent/arrowkeeper relationships\nCleaner error handling - More specific error messages for your template\n\n\n\n\n\nGoogle Sheets (recommended): Set DATA_ENTRY to your sheet URL\nLocal CSV: Use local-data/sample-google-template.csv for testing\nDirect initialization: SigVis(data_path='your-file.csv')\n\n\n\n\n\nlayout='spring' - Force-directed (default)\nlayout='circular' - Nodes in a circle\nlayout='random' - Random positioning\nlayout='shell' - Concentric shells"
+  },
+  {
+    "objectID": "SIGVIS_GUIDE.html#your-google-template-structure",
+    "href": "SIGVIS_GUIDE.html#your-google-template-structure",
+    "title": "SigVis Quick Reference - Google Template",
+    "section": "",
+    "text": "Your data should have these columns: - from - source node - to - target node - from_parent - cluster/parent of source node - to_parent - cluster/parent of target node\n- to_minimum_requirements - requirements description - arrowkeeper - oversight/responsibility assignment"
+  },
+  {
+    "objectID": "SIGVIS_GUIDE.html#basic-usage",
+    "href": "SIGVIS_GUIDE.html#basic-usage",
+    "title": "SigVis Quick Reference - Google Template",
+    "section": "",
+    "text": "from scripts.classes.sig_vis import SigVis\n\n# Load data (automatically uses DATA_ENTRY from .env)\nsig_vis = SigVis()\n\n# Basic network plot\nsig_vis.plot()\n\n# Clustered visualizations\nsig_vis.plot_clustered(cluster_by='to_parent')      # Default clustering\nsig_vis.plot_clustered(cluster_by='from_parent')    # Alternative clustering  \nsig_vis.plot_clustered(cluster_by='arrowkeeper')    # By oversight\n# or use shorthand:\nsig_vis.plot_by_arrowkeeper()\n\n# Get statistics\nstats = sig_vis.get_network_stats()\nclusters = sig_vis.get_cluster_summary()\nroles = sig_vis.get_role_connections()\n\n# Display data table\nsig_vis.table()"
+  },
+  {
+    "objectID": "SIGVIS_GUIDE.html#key-simplifications-made",
+    "href": "SIGVIS_GUIDE.html#key-simplifications-made",
+    "title": "SigVis Quick Reference - Google Template",
+    "section": "",
+    "text": "Hardcoded column names - No more auto-detection, uses your specific template\nTemplate-specific methods - Added get_cluster_summary(), get_role_connections(), plot_by_arrowkeeper()\nImproved clustering logic - Better handling of your parent/arrowkeeper relationships\nCleaner error handling - More specific error messages for your template"
+  },
+  {
+    "objectID": "SIGVIS_GUIDE.html#data-source-options",
+    "href": "SIGVIS_GUIDE.html#data-source-options",
+    "title": "SigVis Quick Reference - Google Template",
+    "section": "",
+    "text": "Google Sheets (recommended): Set DATA_ENTRY to your sheet URL\nLocal CSV: Use local-data/sample-google-template.csv for testing\nDirect initialization: SigVis(data_path='your-file.csv')"
+  },
+  {
+    "objectID": "SIGVIS_GUIDE.html#layout-options-for-plots",
+    "href": "SIGVIS_GUIDE.html#layout-options-for-plots",
+    "title": "SigVis Quick Reference - Google Template",
+    "section": "",
+    "text": "layout='spring' - Force-directed (default)\nlayout='circular' - Nodes in a circle\nlayout='random' - Random positioning\nlayout='shell' - Concentric shells"
+  },
+  {
+    "objectID": "GIT_STATUS.html",
+    "href": "GIT_STATUS.html",
+    "title": "Git Status Summary",
+    "section": "",
+    "text": "Essential project files that should be tracked:\ngit add .gitignore README.md SIGVIS_GUIDE.md _quarto.yml \ngit add index.qmd sig.qmd styles.css main.py pyproject.toml uv.lock\ngit add dev-server.sh scripts/ templates/ \ngit add client_credentials/README.md local-data/README.md\n\n\n\nThese are correctly excluded by .gitignore:\n\n.venv/ - Python virtual environment\n_site/ - Quarto generated site\n*_files/ - Quarto generated assets (index_files/, sig_files/)\n.quarto/ - Quarto cache\n__pycache__/ - Python bytecode\nclient_credentials/.env - Environment secrets\n.vscode/settings.json - Personal IDE settings\nlocal-data/*.csv - Local data files (except samples)\n\n\n\n\nsig-consulting/\n├── .gitignore ✅\n├── .vscode/\n│   └── extensions.json ✅ (tracked for team setup)\n├── README.md ✅\n├── SIGVIS_GUIDE.md ✅\n├── _quarto.yml ✅\n├── index.qmd ✅\n├── sig.qmd ✅  \n├── styles.css ✅\n├── main.py ✅\n├── pyproject.toml ✅\n├── uv.lock ✅\n├── dev-server.sh ✅\n├── scripts/ ✅\n├── templates/ ✅\n├── client_credentials/\n│   └── README.md ✅\n└── local-data/\n    └── README.md ✅\n\n\n\n\nCommit the initial project setup\nSet up CI/CD if needed\nConfigure branch protection rules"
+  },
+  {
+    "objectID": "GIT_STATUS.html#files-ready-to-commit",
+    "href": "GIT_STATUS.html#files-ready-to-commit",
+    "title": "Git Status Summary",
+    "section": "",
+    "text": "Essential project files that should be tracked:\ngit add .gitignore README.md SIGVIS_GUIDE.md _quarto.yml \ngit add index.qmd sig.qmd styles.css main.py pyproject.toml uv.lock\ngit add dev-server.sh scripts/ templates/ \ngit add client_credentials/README.md local-data/README.md"
+  },
+  {
+    "objectID": "GIT_STATUS.html#files-properly-ignored",
+    "href": "GIT_STATUS.html#files-properly-ignored",
+    "title": "Git Status Summary",
+    "section": "",
+    "text": "These are correctly excluded by .gitignore:\n\n.venv/ - Python virtual environment\n_site/ - Quarto generated site\n*_files/ - Quarto generated assets (index_files/, sig_files/)\n.quarto/ - Quarto cache\n__pycache__/ - Python bytecode\nclient_credentials/.env - Environment secrets\n.vscode/settings.json - Personal IDE settings\nlocal-data/*.csv - Local data files (except samples)"
+  },
+  {
+    "objectID": "GIT_STATUS.html#directory-structure-for-git",
+    "href": "GIT_STATUS.html#directory-structure-for-git",
+    "title": "Git Status Summary",
+    "section": "",
+    "text": "sig-consulting/\n├── .gitignore ✅\n├── .vscode/\n│   └── extensions.json ✅ (tracked for team setup)\n├── README.md ✅\n├── SIGVIS_GUIDE.md ✅\n├── _quarto.yml ✅\n├── index.qmd ✅\n├── sig.qmd ✅  \n├── styles.css ✅\n├── main.py ✅\n├── pyproject.toml ✅\n├── uv.lock ✅\n├── dev-server.sh ✅\n├── scripts/ ✅\n├── templates/ ✅\n├── client_credentials/\n│   └── README.md ✅\n└── local-data/\n    └── README.md ✅"
+  },
+  {
+    "objectID": "GIT_STATUS.html#next-steps",
+    "href": "GIT_STATUS.html#next-steps",
+    "title": "Git Status Summary",
+    "section": "",
+    "text": "Commit the initial project setup\nSet up CI/CD if needed\nConfigure branch protection rules"
+  },
+  {
+    "objectID": "sig.html#understanding-the-system-in-terms-of-roles",
+    "href": "sig.html#understanding-the-system-in-terms-of-roles",
+    "title": "Structured intelligence governance template",
+    "section": "Understanding the system in terms of roles",
+    "text": "Understanding the system in terms of roles\n\n\n\n\n\n\n\nsig_clusters_1\n\n\ncluster_teams\n\nroles\n\n\n\nanalytics\n\nanalytics\n\n\n\nscientists\n\nscientists\n\n\n\nanalytics-&gt;scientists\n\n\n\n\n\ntools\n\ntools\n\n\n\nanalytics-&gt;tools\n\n\n\n\n\ndata\n\ndata\n\n\n\nanalytics-&gt;data\n\n\n\n\n\nscientists-&gt;analytics\n\n\n\n\n\ndecision_makers\n\ndecision_makers\n\n\n\nscientists-&gt;decision_makers\n\n\n\n\n\nreporting\n\nreporting\n\n\n\nscientists-&gt;reporting\n\n\n\n\n\ndecision_makers-&gt;scientists\n\n\n\n\n\ntools-&gt;scientists\n\n\n\n\n\nprojects\n\nprojects\n\n\n\nprojects-&gt;decision_makers\n\n\n\n\n\nreporting-&gt;projects\n\n\n\n\n\ndata-&gt;tools"
+  }
+]

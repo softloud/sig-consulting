@@ -1,0 +1,5 @@
+*.csv
+
+# explictly add to this file when new data is added to local-data
+# to avoid accidentally committing sensitive or large files
+# see README.md for more details

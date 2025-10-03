@@ -1,0 +1,214 @@
+---
+title: "Structured intelligence governance template"
+subtitle: "Structured intelligence systems understood by arrowkeepers"
+format: 
+  html:
+    theme: cosmo
+    toc: true
+    toc-location: left
+    code-fold: true
+    grid:
+      sidebar-width: 300px
+      body-width: 900px
+      margin-width: 200px
+execute:
+    warning: false    
+    message: false    
+---
+
+- [**Blog post**](https://softloud.github.io/good-enough/blog/2025-10-02-sig-analysis.html) - *Arrowkeepers, assemble! Designing data systems that care about people* 
+
+## Understanding the system in terms of roles
+
+
+```{dot}
+
+digraph sig_clusters_1 {
+  rankdir=BT
+
+  subgraph cluster_teams {
+    label="roles"
+    analytics
+    scientists
+    decision_makers -> scientists -> 
+      analytics -> scientists -> decision_makers
+
+  }
+
+  analytics -> tools
+  tools -> scientists
+  projects -> decision_makers
+  scientists -> reporting
+  reporting-> projects
+  analytics -> data
+  data -> tools
+
+}
+
+
+```
+
+
+
+## Data entry 
+
+```{python}
+#| echo: false
+#| output: asis
+from scripts.classes.sig_vis import SigVis
+
+# Never print any credentials or local environment variables
+
+
+# Create a SigVis instance to check data source
+temp_sig = SigVis()
+data_info = temp_sig.get_data_source_info()
+
+print(f"📊 **Data source:** `{data_info['type']}`")
+
+```
+
+## Data Loading & Configuration
+
+```{python}
+# Import the SIG visualization system
+from scripts.classes.sig_vis import SigVis
+import warnings
+warnings.filterwarnings('ignore')
+
+
+# Create SigVis instance - now optimized for your Google template
+sig_vis = SigVis()  # Uses: from, to, from_parent, to_parent, to_minimum_requirements, arrowkeeper
+print(f"✅ Data loaded successfully!")
+print(f"📊 Dataset shape: {sig_vis.edges.shape}")
+print(f"📋 Template columns: {list(sig_vis.edges.columns)}")
+```
+
+## Network Visualizations
+
+
+### Coloured by role relationship
+
+> Where did the system hurt people?
+
+```{python}
+sig_vis.plot_with_role_shapes_and_arrowkeeper_lines()
+
+```
+
+
+### Minimum requirements
+
+> Show me on the structured intelligence governance plot where the system hurt you or your people in the context of a question you were trying to answer
+
+Charles puts her hand up for whatever tasks people don't want to do in this. 
+
+```{python}
+# Generate clustered network visualization by to_parent
+print("🎨 Generating network clustered by 'to_parent'...")
+sig_vis.table_min_req()
+
+```
+
+
+## Network Statistics
+
+```{python}
+# Display comprehensive network statistics
+stats = sig_vis.get_network_stats()
+print("🔍 Network Analysis Summary:")
+print("=" * 50)
+for key, value in stats.items():
+    print(f"  {key.replace('_', ' ').title()}: {value}")
+```
+
+## Cluster Analysis
+
+```{python}
+# Analyze the cluster structure from your Google template
+cluster_summary = sig_vis.get_cluster_summary()
+print("📊 Cluster Distribution:")
+print("=" * 30)
+
+for cluster_type, distribution in cluster_summary.items():
+    print(f"\n{cluster_type.replace('_', ' ').title()}:")
+    for cluster, count in distribution.items():
+        print(f"  {cluster}: {count} connections")
+```
+
+## Role Connections Analysis
+
+```{python}
+# Special analysis for 'roles' connections in your data
+role_analysis = sig_vis.get_role_connections()
+print("🎯 Role Network Analysis:")
+print("=" * 25)
+print(f"Total role connections: {role_analysis['total_roles_connections']}")
+print(f"\nNodes connecting FROM roles: {role_analysis['nodes_connected_from_roles']}")
+print(f"Nodes connecting TO roles: {role_analysis['nodes_connected_to_roles']}")
+```
+
+## Data Table
+
+Explore the raw data that powers our network analysis:
+
+```{python}
+# Display the data table
+sig_vis.table()
+```
+
+## Network Visualizations with Role-Based Shapes
+
+### Node Shapes by Role Connection
+
+This visualization uses different node shapes to indicate how nodes connect to the central "roles" node:
+
+```{python}
+# Generate network visualization with role-based node shapes
+print("🎨 Generating network with role-based shapes...")
+sig_vis.plot_with_role_shapes(cluster_by='to_parent', figsize=(16, 12))
+```
+
+### Alternative: Shapes by Role, Colors by Arrowkeeper
+
+```{python}
+# Generate network visualization with role shapes and arrowkeeper colors
+print("🎨 Generating network: shapes by role connections, colors by arrowkeeper...")
+sig_vis.plot_with_role_shapes(cluster_by='arrowkeeper', figsize=(16, 12))
+```
+
+### Advanced: Shapes by Role, Colors by Cluster, Lines by Arrowkeeper
+
+This advanced visualization combines all three visual encoding dimensions:
+
+## by parent
+
+```{python}
+# Generate comprehensive network visualization with all three visual encodings
+print("🎨 Generating advanced network: shapes by role, colors by to_parent, lines by arrowkeeper...")
+sig_vis.plot_with_role_shapes_and_arrowkeeper_lines(cluster_by='to_parent', figsize=(18, 14))
+```
+
+## by arrowkeeper
+
+```{python}
+# Alternative: shapes by role, colors by arrowkeeper, lines by arrowkeeper  
+print("🎨 Generating network: shapes by role, colors and lines by arrowkeeper...")
+sig_vis.plot_with_role_shapes_and_arrowkeeper_lines(cluster_by='arrowkeeper', figsize=(18, 14))
+```
+
+## Summary & Insights
+
+The network analysis reveals the structure of your data relationships, defined by arrowkeeper roles:
+
+- **Central nodes** like "roles" act as hubs connecting multiple domains
+- **Cluster analysis** shows how different organizational units interact
+- **Arrowkeeper assignments** reveal oversight and responsibility patterns
+- **Parent relationships** demonstrate hierarchical structures
+
+---
+
+*Return to [Home](index.html) | View [Documentation](README.md)*
+
+
+```
