@@ -39,9 +39,3 @@ sig_vis.table_min_req()
 
 ```
 
----
-
-*Return to [Home](index.html) | View [Documentation](README.md)*
-
-
-```

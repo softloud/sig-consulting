@@ -1,0 +1,23 @@
+[
+  {
+    "objectID": "sig.html",
+    "href": "sig.html",
+    "title": "Structured intelligence governance template",
+    "section": "",
+    "text": "Blog post - Arrowkeepers, assemble! Designing data systems that care about people"
+  },
+  {
+    "objectID": "sig.html#understanding-the-system-in-terms-of-roles",
+    "href": "sig.html#understanding-the-system-in-terms-of-roles",
+    "title": "Structured intelligence governance template",
+    "section": "Understanding the system in terms of roles",
+    "text": "Understanding the system in terms of roles\nPoints to where in the picture the system hurt people.\n\n\nClick to expand\nfrom scripts.classes.sig_vis import SigVis\n\nsig_vis = SigVis()\n\nsig_vis.plot_sig_contexts()\n\n\n✅ Graph created: 8 nodes, 11 edges"
+  },
+  {
+    "objectID": "sig.html#minimum-requirements",
+    "href": "sig.html#minimum-requirements",
+    "title": "Structured intelligence governance template",
+    "section": "Minimum requirements",
+    "text": "Minimum requirements\n\n\nClick to expand\nsig_vis.table_min_req()\n\n\n\n\n\n\n\n\n\nfrom\nto\narrowkeeper\nto_minimum_requirements\n\n\n\n\n0\ndata\ntools\nautomata\nAutomated capture of each automated interopera...\n\n\n1\ntools\nreporting\nautomata\nAutomated testing of reporting tools, visualis...\n\n\n2\nscientists\nreporting\nscientists\nScientists need a reliable workflow for develo...\n\n\n3\ntools\nscientists\nanalytics\nScientists need a scientific workflow tools su...\n\n\n4\nprojects\ndeciders\ndeciders\nDecision makers need to be able to assess the ...\n\n\n5\nreporting\nprojects\nautomata\nProjects are accessible: internal decision mak...\n\n\n6\ntools\nanalytics\nanalytics\nAt least 2 people can use every tool required ...\n\n\n7\nfield\ntools\nanalytics\nSmooth data input workflows.\n\n\n8\nscientists\nfield\nanalytics\nCommunicates data collection requirements.\n\n\n9\ndata\ntools\nautomata\nData is updated across pipelines.\n\n\n10\nanalytics\nscientists\nanalytics\nWorkflows sufficient for their arrows.\n\n\n11\nscientists\ndeciders\nscientists\nUse project to come up with scientistic consensus"
+  }
+]
