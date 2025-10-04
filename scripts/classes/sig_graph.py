@@ -42,7 +42,8 @@ class SigGraph:
             source='from', 
             target='to', 
             edge_attr=True,  # Include all edge attributes
-            create_using=nx.Graph()
+            create_using=nx.DiGraph(),
+            connectionstyle='arc3,rad=0.2'
         )
         
         # Add node attributes from nodes dataframe

@@ -1,31 +1,39 @@
 ---
-title: "Structured intelligence governance"
+title: "Structured intelligence governance template"
 subtitle: "Structured intelligence systems understood by arrowkeepers"
 format: 
-  revealjs
+  html:
+    theme: cosmo
+    toc: true
+    toc-location: left
+    code-fold: true
+    grid:
+      sidebar-width: 300px
+      body-width: 900px
+      margin-width: 200px
 execute:
     warning: false    
     message: false    
 ---
 
-## Where does it hurt?
+- [**Blog post**](https://softloud.github.io/good-enough/blog/2025-10-02-sig-analysis.html) - *Arrowkeepers, assemble! Designing data systems that care about people* 
 
-> Point at the picture where the data system hurt people.
-''
+## Understanding the system in terms of roles
+
+Points to where in the picture the system hurt people.
+
 ```{python}
 
 from scripts.classes.sig_graph import SigDat
 
-# sig_dat = SigDat(data_source="template")
-sig_dat = SigDat(data_source="client")
+sig_dat = SigDat()
+
 
 ```
 
+but ugh fiddly in object oriented, load into R to play
 
 ```{python}
-
-# but ugh graphs fiddly in object oriented, load into R to play
-
 # write data from python to R
 sig_dat.edges_df.to_csv('local-data/edges.csv')
 sig_dat.nodes_df.to_csv('local-data/nodes.csv')
@@ -37,54 +45,43 @@ library(tidyverse)
 edges_df <- read_csv("local-data/edges.csv") |> select(-"...1")
 nodes_df <- read_csv("local-data/nodes.csv") |> select(-"...1")
 
-# head(edges_df)
-# head(nodes_df)
+head(edges_df)
+head(nodes_df)
+
 
 ```
 
+## system overview
+
+## workflow
+
 ```{r}
-# wrangle into graph data for R
+#| fig-height: 18
+#| fig-width: 12
 
 library(ggraph)
 library(tidygraph)
 
-plot_graph <- edges_df %>%
+edges_df %>%
   select(from, to, to_minimum_requirements, arrowkeeper, status) %>%
   as_tbl_graph() %>%
   activate("nodes") %>%
   left_join(nodes_df, by = c("name" = "node")) %>%
-  mutate(
-    object = if_else(role_context == "humans", role_context, "not human")
-  )
-
-```
-
-# system overview
-
-## {.stretch}
-
-```{r}
-#| fig-width: 12
-#| fig-height: 8
-
-
-plot_graph %>%
   ggraph() +
-  geom_edge_link(
-    aes(linetype = arrowkeeper, color = status),
-    alpha = 0.8
-  ) +
-  geom_node_point(aes(shape = object),
+  geom_node_point(aes(shape = role_context),
     size = 20, alpha = 0.1
   ) +
   geom_node_text(aes(label = name)) +
-  theme_minimal(
-    base_size = 15
+  geom_edge_link(
+    aes(linetype = arrowkeeper, color = status)
   ) +
+  theme_minimal() +
   theme(
     panel.grid = element_blank(),
     axis.ticks = element_blank(),
-    axis.text = element_blank()
+    axis.text = element_blank(),
+    legend.position = "top",
+    legend.direction = "vertical"
   ) +
   labs(
     title = "Structured intelligence governance",
@@ -96,39 +93,40 @@ plot_graph %>%
 
 ```
 
-## {.stretch}
+## relationships
 
 ```{r}
+#| fig-height: 18
 #| fig-width: 12
-#| fig-height: 8
 
 library(ggraph)
 library(tidygraph)
 
 
-plot_graph %>%
+edges_df %>%
+  select(from, to, to_minimum_requirements, arrowkeeper, status) %>%
   as_tbl_graph() %>%
   activate("nodes") %>%
   left_join(nodes_df, by = c("name" = "node")) %>%
   ggraph(layout = "linear", circular = TRUE) +
-  geom_node_point(aes(shape = object),
+  geom_node_point(aes(shape = role_context),
     size = 20, alpha = 0.1
   ) +
-  geom_node_text(aes(label = name)) +
+  geom_node_text(aes(label = name), size = 10) +
   geom_edge_arc(
     aes(linetype = arrowkeeper, color = status)
   ) +
-  theme_minimal(
-    base_size = 15
-  ) +
+  theme_minimal() +
   theme(
     panel.grid = element_blank(),
     axis.ticks = element_blank(),
-    axis.text = element_blank()
+    axis.text = element_blank(),
+    legend.position = "top",
+    legend.direction = "vertical"
   ) +
   labs(
     title = "Structured intelligence governance",
-    subtitle = "Relationships",
+    subtitle = "Roles and contexts",
     x = "",
     y = ""
   )
@@ -184,4 +182,72 @@ edges_df %>%
   gt()
 
 
+```
+
+# tests
+
+## test data
+
+```{python}
+from scripts.classes.sig_dat import SigDat
+
+sig_dat = SigDat()
+
+
+
+```
+
+```{python}
+
+print(SigDat.__doc__)
+
+```
+```{python}
+
+sig_dat.__dict__
+
+```
+
+
+```{python}
+sig_dat.edges_df
+
+```
+
+
+## test graph
+
+```{python}
+from scripts.classes.sig_graph import SigGraph
+
+sig_graph = SigGraph()
+
+
+```
+
+
+
+## test vis
+
+
+```{python}
+from scripts.classes.sig_vis import SigVis
+
+sig_vis = SigVis()
+
+
+
+```
+
+
+
+```{python}
+sig_vis.plot_role_contexts()
+
+```
+
+
+
+```{python}
+sig_vis.table_min_req()
 ```

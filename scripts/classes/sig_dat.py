@@ -2,8 +2,7 @@ import pandas as pd
 import os
 from dotenv import load_dotenv
 
-# Load environment variables from client_credentials/.env
-load_dotenv('client_credentials/.env')
+
 
 class SigDat:
     """
@@ -14,26 +13,33 @@ class SigDat:
     DATA_ENTRY variable set.
     """
     
-    def __init__(self, data_path=None):
+    def __init__(self, data_source="template"):
         """
         Initialize SigDat with data loading and preparation
         
         Parameters:
-        - data_path: URL to Google Sheets
+        - data_source: Source of the data (e.g., "template", "custom")
 
         Attributes:
-        - data_path: Path Goolge Sheets
+        - data_source: Source of the data
         - edges_df: DataFrame of edges
         - nodes_df: DataFrame of nodes
 
         """
+        # Load environment variables from client_credentials/.env
 
-        self._sheet_id = os.getenv('GS_SHEET_ID') if data_path is None else data_path
+        if data_source == "template":
+            load_dotenv('client_credentials/.env')
+        elif data_source == "client":
+            load_dotenv('client_credentials/.env-client', override=True)
+        
 
-        self.edges_df = self._load_data('edges')
-        self.nodes_df = self._load_data('nodes')
-    
-        # helpers 
+        self._sheet_id = os.getenv('GS_SHEET_ID') 
+
+        self.edges_df = self._load_data('edges')# .set_index(['from', 'to'])
+        self.nodes_df = self._load_data('nodes')# .set_index(['node', 'role_context'])
+
+        # helpers   
     def _load_data(self, sheet_name):
 
         # set sheet id

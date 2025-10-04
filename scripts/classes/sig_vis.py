@@ -40,9 +40,10 @@ class SigVis:
             'from', 
             'to', 
             'arrowkeeper', 
-            "to_minimum_requirements"]]
+            "to_minimum_requirements",
+            "status"]]
 
-    def plot_sig_contexts(self):
+    def plot_role_contexts(self):
         G = self.graph
         pos = nx.spring_layout(G)
         node_attrs = self._node_plot_attributes()
@@ -61,7 +62,8 @@ class SigVis:
             pos, 
             edge_color='gray', 
             alpha=0.5, 
-            arrows=True
+            arrows=True,
+            connectionstyle='arc3,rad=0.2'
         )
         nx.draw_networkx_labels(G, pos)
         plt.title("structured intelligence governance minimal presentation")
@@ -80,6 +82,6 @@ class SigVis:
         }        
         
         return self.nodes.assign(
-            shape=lambda df: np.where(df['sig_context'] == 'humans', 'o', 's'),
-            color=lambda df: df['sig_context'].map(color_palette)
+            shape=lambda df: np.where(df['role_context'] == 'humans', 'o', 's'),
+            color=lambda df: df['role_context'].map(color_palette)
         ).set_index('node')

@@ -1,3 +1,28 @@
+project:
+  type: website
+  output-dir: docs
+  title: "SIG Consulting"
+
+format:
+  html:
+    theme: cosmo
+    toc: true
+    toc-depth: 2
+    number-sections: false
+    code-fold: true
+    code-summary: "Click to expand"
+    self-contained: true
+
+website:
+  navbar:
+    left:
+      - text: Home
+        href: sig.qmd
+      - text: Analysis
+        href: sig.qmd
+      - href: dontpanic
+        href: sig-dontpanic.qmd
+
 execute: 
   error: true
   warning: false
