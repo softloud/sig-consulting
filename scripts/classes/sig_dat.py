@@ -7,13 +7,13 @@ load_dotenv('client_credentials/.env')
 
 class SigDat:
     """
-    Data scraper and loader for SIG (Structured Intelligence Governance) data.
-    Handles loading from various sources: Google Sheets, CSV files, URLs.
+    Data preparation layer for SIG (Structured Intelligence Governance).
+    Focuses on loading raw data and preparing clean node and edge dataframes.
     """
     
     def __init__(self, data_path=None, sheet_id=None):
         """
-        Initialize SigDat with data loading
+        Initialize SigDat with data loading and preparation
         
         Parameters:
         - data_path: Path to data file or URL
@@ -21,27 +21,113 @@ class SigDat:
         """
         self.data_path = data_path
         self.sheet_id = sheet_id
-        self.edges = None
-        self.load_data()
+        self.raw_data = None
+        self.edges_df = None
+        self.nodes_df = None
+        self.load_and_prepare_data()
 
-    def load_data(self):
-        """Load data using the _load_data method"""
-        self.edges = self._load_data(self.data_path, self.sheet_id)
-        if self.edges is not None:
-            print(f"✅ Data loaded successfully: {len(self.edges)} edges")
+    def load_and_prepare_data(self):
+        """Load raw data and prepare edge and node dataframes"""
+        self.raw_data = self._load_data(self.data_path, self.sheet_id)
+        if self.raw_data is not None:
+            self.edges_df = self._prepare_edges_dataframe()
+            self.nodes_df = self._prepare_nodes_dataframe()
+            print(f"✅ Data prepared: {len(self.edges_df)} edges, {len(self.nodes_df)} nodes")
         else:
-            print("❌ Failed to load data")
+            print("❌ Failed to load and prepare data")
+
+    def get_edges_dataframe(self):
+        """Return the prepared edges dataframe"""
+        return self.edges_df
+
+    def get_nodes_dataframe(self):
+        """Return the prepared nodes dataframe"""
+        return self.nodes_df
 
     def get_edges(self):
-        """Return the edges dataframe"""
-        return self.edges
+        """Return the edges dataframe (legacy compatibility)"""
+        return self.edges_df
 
     def get_nodes(self):
-        """Extract unique nodes from edges data"""
-        if self.edges is not None and 'from' in self.edges.columns and 'to' in self.edges.columns:
-            nodes = list(set(self.edges['from'].unique()) | set(self.edges['to'].unique()))
-            return nodes
+        """Extract unique nodes as list (legacy compatibility)"""
+        if self.nodes_df is not None:
+            return self.nodes_df['node'].tolist()
         return []
+
+    def _prepare_edges_dataframe(self):
+        """Prepare clean edges dataframe from raw data"""
+        if self.raw_data is None:
+            return pd.DataFrame()
+        
+        # Ensure required columns exist
+        edges_df = self.raw_data.copy()
+        
+        # Standardize column names and clean data
+        if 'from' in edges_df.columns and 'to' in edges_df.columns:
+            # Remove any rows with missing source or target
+            edges_df = edges_df.dropna(subset=['from', 'to'])
+            
+            # Clean whitespace
+            edges_df['from'] = edges_df['from'].astype(str).str.strip()
+            edges_df['to'] = edges_df['to'].astype(str).str.strip()
+            
+            # Add edge IDs if not present
+            if 'edge_id' not in edges_df.columns:
+                edges_df['edge_id'] = range(len(edges_df))
+                
+            return edges_df
+        else:
+            print(f"❌ Required 'from' and 'to' columns not found. Available: {list(edges_df.columns)}")
+            return pd.DataFrame()
+
+    def _prepare_nodes_dataframe(self):
+        """Prepare clean nodes dataframe from edge data"""
+        if self.edges_df is None or self.edges_df.empty:
+            return pd.DataFrame()
+            
+        # Extract unique nodes from edges
+        from_nodes = set(self.edges_df['from'].unique())
+        to_nodes = set(self.edges_df['to'].unique())
+        all_nodes = from_nodes.union(to_nodes)
+        
+        # Create nodes dataframe
+        nodes_df = pd.DataFrame({'node': list(all_nodes)})
+        
+        # Add node attributes by aggregating from edges
+        node_attributes = {}
+        
+        for node in all_nodes:
+            # Get attributes from edges where this node appears
+            from_edges = self.edges_df[self.edges_df['from'] == node]
+            to_edges = self.edges_df[self.edges_df['to'] == node]
+            
+            # Aggregate attributes (take first non-null value)
+            attrs = {}
+            
+            # From 'from_parent' when node is source
+            if 'from_parent' in self.edges_df.columns and not from_edges.empty:
+                parent_vals = from_edges['from_parent'].dropna()
+                if not parent_vals.empty:
+                    attrs['parent'] = parent_vals.iloc[0]
+                    
+            # From 'to_parent' when node is target (if no parent found yet)
+            if 'parent' not in attrs and 'to_parent' in self.edges_df.columns and not to_edges.empty:
+                parent_vals = to_edges['to_parent'].dropna()
+                if not parent_vals.empty:
+                    attrs['parent'] = parent_vals.iloc[0]
+            
+            # Count connections
+            attrs['in_degree'] = len(to_edges)
+            attrs['out_degree'] = len(from_edges)
+            attrs['total_degree'] = attrs['in_degree'] + attrs['out_degree']
+            
+            node_attributes[node] = attrs
+        
+        # Add attributes to nodes dataframe
+        for attr in ['parent', 'in_degree', 'out_degree', 'total_degree']:
+            nodes_df[attr] = nodes_df['node'].map(lambda x: node_attributes[x].get(attr, None))
+            
+        return nodes_df
 
     def _load_data(self, data_path=None, sheet_id=None):
         """Load edge data from various sources"""

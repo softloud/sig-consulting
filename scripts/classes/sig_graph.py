@@ -11,39 +11,46 @@ load_dotenv('client_credentials/.env')
 
 class SigGraph:
     """
-    Handles graph data loading, processing, and analysis logic.
-    Separated from visualization concerns.
+    Graph object creation and network analysis layer.
+    Uses prepared dataframes from SigDat to create NetworkX graph objects and perform analysis.
     """
     
     def __init__(self, data_path=None, sheet_id=None):
         """
-        Initialize SigGraph with data loading
+        Initialize SigGraph with NetworkX graph creation
         
         Parameters:
         - data_path: Path to data file or URL
         - sheet_id: Google Sheets ID for direct access
         """
         self.sig_dat = SigDat(data_path, sheet_id)
-        self.edges =  self.sig_dat.edges
+        self.edges_df = self.sig_dat.get_edges_dataframe()
+        self.nodes_df = self.sig_dat.get_nodes_dataframe()
         self.graph = None
         self._create_graph()
     
-    
     def _create_graph(self):
-        """Create NetworkX graph from edge data"""
-        source_col = 'from'
-        target_col = 'to'
-        
-        if source_col in self.edges.columns and target_col in self.edges.columns:
-            self.graph = nx.from_pandas_edgelist(
-                self.edges, 
-                source=source_col, 
-                target=target_col, 
-                create_using=nx.Graph()
-            )
-        else:
-            print(f"Required columns not found. Available: {list(self.edges.columns)}")
+        """Create NetworkX graph object from prepared dataframes"""
+        if self.edges_df is None or self.edges_df.empty:
+            print("❌ No edge data available for graph creation")
             self.graph = nx.Graph()
+            return
+            
+        # Create graph from edges dataframe
+        self.graph = nx.from_pandas_edgelist(
+            self.edges_df, 
+            source='from', 
+            target='to', 
+            edge_attr=True,  # Include all edge attributes
+            create_using=nx.Graph()
+        )
+        
+        # Add node attributes from nodes dataframe
+        if self.nodes_df is not None and not self.nodes_df.empty:
+            node_attrs = self.nodes_df.set_index('node').to_dict('index')
+            nx.set_node_attributes(self.graph, node_attrs)
+        
+        print(f"✅ Graph created: {self.graph.number_of_nodes()} nodes, {self.graph.number_of_edges()} edges")
     
     def get_network_stats(self):
         """Get basic network statistics"""
@@ -55,11 +62,11 @@ class SigGraph:
             'edges': self.graph.number_of_edges(),
             'density': nx.density(self.graph),
             'is_connected': nx.is_connected(self.graph),
-            'unique_from_nodes': self.edges['from'].nunique() if 'from' in self.edges.columns else 'N/A',
-            'unique_to_nodes': self.edges['to'].nunique() if 'to' in self.edges.columns else 'N/A',
-            'unique_clusters_to_parent': self.edges['to_parent'].nunique() if 'to_parent' in self.edges.columns else 'N/A',
-            'unique_clusters_from_parent': self.edges['from_parent'].nunique() if 'from_parent' in self.edges.columns else 'N/A',
-            'unique_arrowkeepers': self.edges['arrowkeeper'].nunique() if 'arrowkeeper' in self.edges.columns else 'N/A'
+            'unique_from_nodes': self.edges_df['from'].nunique() if 'from' in self.edges_df.columns else 'N/A',
+            'unique_to_nodes': self.edges_df['to'].nunique() if 'to' in self.edges_df.columns else 'N/A',
+            'unique_clusters_to_parent': self.edges_df['to_parent'].nunique() if 'to_parent' in self.edges_df.columns else 'N/A',
+            'unique_clusters_from_parent': self.edges_df['from_parent'].nunique() if 'from_parent' in self.edges_df.columns else 'N/A',
+            'unique_arrowkeepers': self.edges_df['arrowkeeper'].nunique() if 'arrowkeeper' in self.edges_df.columns else 'N/A'
         }
         
         if self.graph.number_of_nodes() > 0:
@@ -71,25 +78,25 @@ class SigGraph:
         """Get summary of clusters in your Google template"""
         summary = {}
         
-        if 'to_parent' in self.edges.columns:
-            summary['to_parent_clusters'] = self.edges['to_parent'].value_counts().to_dict()
-        
-        if 'from_parent' in self.edges.columns:
-            summary['from_parent_clusters'] = self.edges['from_parent'].value_counts().to_dict()
+        if 'to_parent' in self.edges_df.columns:
+            summary['to_parent_clusters'] = self.edges_df['to_parent'].value_counts().to_dict()
             
-        if 'arrowkeeper' in self.edges.columns:
-            summary['arrowkeeper_distribution'] = self.edges['arrowkeeper'].value_counts().to_dict()
+        if 'from_parent' in self.edges_df.columns:
+            summary['from_parent_clusters'] = self.edges_df['from_parent'].value_counts().to_dict()
+            
+        if 'arrowkeeper' in self.edges_df.columns:
+            summary['arrowkeeper_distribution'] = self.edges_df['arrowkeeper'].value_counts().to_dict()
             
         return summary
     
     def get_role_connections(self):
         """Analyze connections to/from 'roles' node"""
-        if 'from' not in self.edges.columns or 'to' not in self.edges.columns:
+        if 'from' not in self.edges_df.columns or 'to' not in self.edges_df.columns:
             return "Missing required columns"
             
         # Find all connections involving 'roles'
-        from_roles = self.edges[self.edges['from'] == 'roles']['to'].tolist()
-        to_roles = self.edges[self.edges['to'] == 'roles']['from'].tolist()
+        from_roles = self.edges_df[self.edges_df['from'] == 'roles']['to'].tolist()
+        to_roles = self.edges_df[self.edges_df['to'] == 'roles']['from'].tolist()
         
         return {
             'nodes_connected_from_roles': from_roles,
@@ -107,13 +114,13 @@ class SigGraph:
         Returns:
         - dict: mapping of nodes to their clusters
         """
-        if cluster_by not in self.edges.columns:
+        if cluster_by not in self.edges_df.columns:
             return {}
         
         node_clusters = {}
         
         # Map nodes to their clusters based on the selected cluster column
-        for _, row in self.edges.iterrows():
+        for _, row in self.edges_df.iterrows():
             source_node = row['from']
             target_node = row['to']
             cluster_value = row[cluster_by]
@@ -144,7 +151,15 @@ class SigGraph:
     
     def get_edges_dataframe(self):
         """Return the edges dataframe"""
-        return self.edges
+        return self.edges_df
+    
+    def get_nodes_dataframe(self):
+        """Return the nodes dataframe"""
+        return self.nodes_df
+    
+    def get_networkx_graph(self):
+        """Return the NetworkX graph object"""
+        return self.graph
     
     def get_role_indicators(self):
         """
@@ -153,16 +168,16 @@ class SigGraph:
         Returns:
         - dict: mapping of nodes to role indicator ('to_roles', 'from_roles', 'both', 'none')
         """
-        if 'from' not in self.edges.columns or 'to' not in self.edges.columns:
+        if 'from' not in self.edges_df.columns or 'to' not in self.edges_df.columns:
             return {}
         
         role_indicators = {}
-        all_nodes = set(self.edges['from'].unique()) | set(self.edges['to'].unique())
+        all_nodes = set(self.edges_df['from'].unique()) | set(self.edges_df['to'].unique())
         
         # Find nodes that connect to roles
-        to_roles = set(self.edges[self.edges['to'] == 'roles']['from'].unique())
+        to_roles = set(self.edges_df[self.edges_df['to'] == 'roles']['from'].unique())
         # Find nodes that connect from roles  
-        from_roles = set(self.edges[self.edges['from'] == 'roles']['to'].unique())
+        from_roles = set(self.edges_df[self.edges_df['from'] == 'roles']['to'].unique())
         
         for node in all_nodes:
             if node == 'roles':
@@ -185,12 +200,12 @@ class SigGraph:
         Returns:
         - dict: mapping of (from_node, to_node) tuples to arrowkeeper values
         """
-        if 'from' not in self.edges.columns or 'to' not in self.edges.columns or 'arrowkeeper' not in self.edges.columns:
+        if 'from' not in self.edges_df.columns or 'to' not in self.edges_df.columns or 'arrowkeeper' not in self.edges_df.columns:
             return {}
         
         edge_arrowkeepers = {}
         
-        for _, row in self.edges.iterrows():
+        for _, row in self.edges_df.iterrows():
             edge = (row['from'], row['to'])
             edge_arrowkeepers[edge] = row['arrowkeeper']
         
