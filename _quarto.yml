@@ -20,6 +20,8 @@ website:
         href: sig.qmd
       - text: Analysis
         href: sig.qmd
+      - href: dontpanic
+        href: sig-dontpanic.qmd
 
 execute: 
   error: true
