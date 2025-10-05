@@ -20,7 +20,7 @@ website:
         href: sig.qmd
       - text: Analysis
         href: sig.qmd
-      - href: dontpanic
+      - text: dontpanic
         href: sig-dontpanic.qmd
 
 execute: 
@@ -28,3 +28,4 @@ execute:
   warning: false
   message: false
   python: .venv/bin/python 
+  enabled: true

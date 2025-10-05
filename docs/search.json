@@ -1,59 +1,136 @@
 [
   {
-    "objectID": "sig.html",
-    "href": "sig.html",
+    "objectID": "sig-dontpanic.html",
+    "href": "sig-dontpanic.html",
     "title": "Structured intelligence governance template",
     "section": "",
-    "text": "Points to where in the picture the system hurt people.\n\n\nClick to expand\n\nfrom scripts.classes.sig_graph import SigDat\n\nsig_dat = SigDat()\n\n\nbut ugh fiddly in object oriented, load into R to play\n\n\nClick to expand\n# write data from python to R\nsig_dat.edges_df.to_csv('local-data/edges.csv')\nsig_dat.nodes_df.to_csv('local-data/nodes.csv')\n\n\n\n\nClick to expand\nlibrary(tidyverse)\nedges_df &lt;- read_csv(\"local-data/edges.csv\") |&gt; select(-\"...1\")\nnodes_df &lt;- read_csv(\"local-data/nodes.csv\") |&gt; select(-\"...1\")\n\nhead(edges_df)\n\n\n# A tibble: 6 × 5\n  from       to         to_minimum_requirements               arrowkeeper status\n  &lt;chr&gt;      &lt;chr&gt;      &lt;chr&gt;                                 &lt;chr&gt;       &lt;chr&gt; \n1 data       tools      \"Automated capture of each automated… automata    opera…\n2 tools      reporting  \"Automated testing of reporting tool… automata    buggy \n3 scientists reporting  \"Scientists need a reliable workflow… scientists  not d…\n4 tools      scientists \"Scientists need a scientific workfl… analytics   not d…\n5 projects   deciders   \"Decision makers need to be able to … deciders    not d…\n6 reporting  projects   \"Projects are accessible: internal d… automata    buggy \n\n\nClick to expand\nhead(nodes_df)\n\n\n# A tibble: 6 × 2\n  node       role_context\n  &lt;chr&gt;      &lt;chr&gt;       \n1 analytics  humans      \n2 projects   projects    \n3 scientists humans      \n4 deciders   humans      \n5 reporting  reporting   \n6 field      humans"
+    "text": "Blog post - Arrowkeepers, assemble! Designing data systems that care about people"
   },
   {
-    "objectID": "sig.html#understanding-the-system-in-terms-of-roles",
-    "href": "sig.html#understanding-the-system-in-terms-of-roles",
+    "objectID": "sig-dontpanic.html#understanding-the-system-in-terms-of-roles",
+    "href": "sig-dontpanic.html#understanding-the-system-in-terms-of-roles",
     "title": "Structured intelligence governance template",
     "section": "Understanding the system in terms of roles",
-    "text": "Understanding the system in terms of roles\nPoints to where in the picture the system hurt people."
+    "text": "Understanding the system in terms of roles\nPoints to where in the picture the system hurt people.\n\n\nClick to expand\n\nfrom scripts.classes.sig_graph import SigDat\n\nsig_dat = SigDat()\n\n\nbut ugh fiddly in object oriented, load into R to play\n\n\nClick to expand\n# write data from python to R\nsig_dat.edges_df.to_csv('local-data/edges.csv')\nsig_dat.nodes_df.to_csv('local-data/nodes.csv')\n\n\n\n\nClick to expand\nlibrary(tidyverse)\nedges_df &lt;- read_csv(\"local-data/edges.csv\") |&gt; select(-\"...1\")\nnodes_df &lt;- read_csv(\"local-data/nodes.csv\") |&gt; select(-\"...1\")\n\nhead(edges_df)\n\n\n# A tibble: 6 × 5\n  from       to         to_minimum_requirements               arrowkeeper status\n  &lt;chr&gt;      &lt;chr&gt;      &lt;chr&gt;                                 &lt;chr&gt;       &lt;chr&gt; \n1 data       tools      \"Automated capture of each automated… automata    buggy \n2 tools      reporting  \"Automated testing of reporting tool… automata    buggy \n3 scientists reporting  \"Scientists need a reliable workflow… scientists  not d…\n4 tools      scientists \"Scientists need a scientific workfl… analytics   not d…\n5 projects   deciders   \"Decision makers need to be able to … deciders    not d…\n6 reporting  projects   \"Projects are accessible: internal d… automata    buggy \n\n\nClick to expand\nhead(nodes_df)\n\n\n# A tibble: 6 × 2\n  node       node_context\n  &lt;chr&gt;      &lt;chr&gt;       \n1 analytics  humans      \n2 projects   projects    \n3 scientists humans      \n4 deciders   humans      \n5 reporting  reporting   \n6 field      humans"
+  },
+  {
+    "objectID": "sig-dontpanic.html#system-overview",
+    "href": "sig-dontpanic.html#system-overview",
+    "title": "Structured intelligence governance template",
+    "section": "system overview",
+    "text": "system overview"
+  },
+  {
+    "objectID": "sig-dontpanic.html#workflow",
+    "href": "sig-dontpanic.html#workflow",
+    "title": "Structured intelligence governance template",
+    "section": "workflow",
+    "text": "workflow\n\n\nClick to expand\nlibrary(ggraph)\nlibrary(tidygraph)\n\nedges_df %&gt;%\n  select(from, to, to_minimum_requirements, arrowkeeper, status) %&gt;%\n  as_tbl_graph() %&gt;%\n  activate(\"nodes\") %&gt;%\n  left_join(nodes_df, by = c(\"name\" = \"node\")) %&gt;%\n  ggraph() +\n  geom_node_point(aes(shape = role_context),\n    size = 20, alpha = 0.1\n  ) +\n  geom_node_text(aes(label = name)) +\n  geom_edge_link(\n    aes(linetype = arrowkeeper, color = status)\n  ) +\n  theme_minimal() +\n  theme(\n    panel.grid = element_blank(),\n    axis.ticks = element_blank(),\n    axis.text = element_blank(),\n    legend.position = \"top\",\n    legend.direction = \"vertical\"\n  ) +\n  labs(\n    title = \"Structured intelligence governance\",\n    subtitle = \"Roles and contexts\",\n    x = \"\",\n    y = \"\"\n  )\n\n\nError in `geom_node_point()`:\n! Problem while computing aesthetics.\nℹ Error occurred in the 1st layer.\nCaused by error:\n! object 'role_context' not found"
+  },
+  {
+    "objectID": "sig-dontpanic.html#relationships",
+    "href": "sig-dontpanic.html#relationships",
+    "title": "Structured intelligence governance template",
+    "section": "relationships",
+    "text": "relationships\n\n\nClick to expand\nlibrary(ggraph)\nlibrary(tidygraph)\n\n\nedges_df %&gt;%\n  select(from, to, to_minimum_requirements, arrowkeeper, status) %&gt;%\n  as_tbl_graph() %&gt;%\n  activate(\"nodes\") %&gt;%\n  left_join(nodes_df, by = c(\"name\" = \"node\")) %&gt;%\n  ggraph(layout = \"linear\", circular = TRUE) +\n  geom_node_point(aes(shape = role_context),\n    size = 20, alpha = 0.1\n  ) +\n  geom_node_text(aes(label = name), size = 10) +\n  geom_edge_arc(\n    aes(linetype = arrowkeeper, color = status)\n  ) +\n  theme_minimal() +\n  theme(\n    panel.grid = element_blank(),\n    axis.ticks = element_blank(),\n    axis.text = element_blank(),\n    legend.position = \"top\",\n    legend.direction = \"vertical\"\n  ) +\n  labs(\n    title = \"Structured intelligence governance\",\n    subtitle = \"Roles and contexts\",\n    x = \"\",\n    y = \"\"\n  )\n\n\nError in `geom_node_point()`:\n! Problem while computing aesthetics.\nℹ Error occurred in the 1st layer.\nCaused by error:\n! object 'role_context' not found"
+  },
+  {
+    "objectID": "sig-dontpanic.html#for-analytics",
+    "href": "sig-dontpanic.html#for-analytics",
+    "title": "Structured intelligence governance template",
+    "section": "for analytics",
+    "text": "for analytics\n\n\nClick to expand\nlibrary(gt)\n\nedges_df %&gt;%\n  filter(arrowkeeper == \"analytics\", status != \"operational\") %&gt;%\n  select(-arrowkeeper) %&gt;%\n  gt()\n\n\n\n\n\n\n\n\nfrom\nto\nto_minimum_requirements\nstatus\n\n\n\n\ntools\nscientists\nScientists need a scientific workflow tools such as scikitlearn, as well as overlapping toolkits with analytics. Scientists need to access data via tools to ensure GDPR and other ethics concerns are adhered to.\nnot developed\n\n\nscientists\nfield\nCommunicates data collection requirements.\nnot developed\n\n\nanalytics\nscientists\nWorkflows sufficient for their arrows.\nnot developed"
+  },
+  {
+    "objectID": "sig-dontpanic.html#for-scientists",
+    "href": "sig-dontpanic.html#for-scientists",
+    "title": "Structured intelligence governance template",
+    "section": "for scientists",
+    "text": "for scientists\n\n\nClick to expand\nedges_df %&gt;%\n  filter(arrowkeeper == \"scientists\", status != \"operational\") %&gt;%\n  select(-arrowkeeper) %&gt;%\n  gt()\n\n\n\n\n\n\n\n\nfrom\nto\nto_minimum_requirements\nstatus\n\n\n\n\nscientists\nreporting\nScientists need a reliable workflow for developing manuscripts, slides, vis, tables, and other reporting for projects.\nnot developed"
+  },
+  {
+    "objectID": "sig-dontpanic.html#for-decision-makers",
+    "href": "sig-dontpanic.html#for-decision-makers",
+    "title": "Structured intelligence governance template",
+    "section": "for decision makers",
+    "text": "for decision makers\n\n\nClick to expand\nedges_df %&gt;%\n  filter(arrowkeeper == \"deciders\", status != \"operational\") %&gt;%\n  select(-arrowkeeper) %&gt;%\n  gt()\n\n\n\n\n\n\n\n\nfrom\nto\nto_minimum_requirements\nstatus\n\n\n\n\nprojects\ndeciders\nDecision makers need to be able to assess the current status of the project.\nnot developed\n\n\ndeciders\nanalytics\nPriorities\nnot developed"
+  },
+  {
+    "objectID": "sig-dontpanic.html#for-field",
+    "href": "sig-dontpanic.html#for-field",
+    "title": "Structured intelligence governance template",
+    "section": "for field",
+    "text": "for field\n\n\nClick to expand\nedges_df %&gt;%\n  filter(arrowkeeper == \"field\", status != \"operational\") %&gt;%\n  select(-arrowkeeper) %&gt;%\n  gt()\n\n\n\n\n\n\n\n\nfrom\nto\nto_minimum_requirements\nstatus"
+  },
+  {
+    "objectID": "sig-dontpanic.html#test-data",
+    "href": "sig-dontpanic.html#test-data",
+    "title": "Structured intelligence governance template",
+    "section": "test data",
+    "text": "test data\n\n\nClick to expand\nfrom scripts.classes.sig_dat import SigDat\n\nsig_dat = SigDat()\n\n\n\n\nClick to expand\nprint(SigDat.__doc__)\n\n\n\n    Data preparation layer for SIG (Structured Intelligence Governance).\n    Focuses on loading raw data and preparing clean node and edge dataframes.\n\n    This function will not work if client_credentials/.env does not have \n    DATA_ENTRY variable set.\n    \n\n\n\n\nClick to expand\nsig_dat.__dict__\n\n\n{'_sheet_id': '1CduXAP1lUvmm-vGOKdehSp19HwchVsDoq1CLWP5MUvM', 'edges_df':           from          to  ... arrowkeeper         status\n0         data       tools  ...    automata          buggy\n1        tools   reporting  ...    automata          buggy\n2   scientists   reporting  ...  scientists  not developed\n3        tools  scientists  ...   analytics  not developed\n4     projects    deciders  ...    deciders  not developed\n5    reporting    projects  ...    automata          buggy\n6        tools   analytics  ...   analytics    operational\n7        field       tools  ...   analytics    operational\n8   scientists       field  ...   analytics  not developed\n9    analytics  scientists  ...   analytics  not developed\n10  scientists    deciders  ...  scientists    operational\n11    deciders   analytics  ...    deciders  not developed\n\n[12 rows x 5 columns], 'nodes_df':          node node_context\n0   analytics       humans\n1    projects     projects\n2  scientists       humans\n3    deciders       humans\n4   reporting    reporting\n5       field       humans\n6       tools        tools\n7        data         data}\n\n\n\n\nClick to expand\nsig_dat.edges_df\n\n\n          from          to  ... arrowkeeper         status\n0         data       tools  ...    automata          buggy\n1        tools   reporting  ...    automata          buggy\n2   scientists   reporting  ...  scientists  not developed\n3        tools  scientists  ...   analytics  not developed\n4     projects    deciders  ...    deciders  not developed\n5    reporting    projects  ...    automata          buggy\n6        tools   analytics  ...   analytics    operational\n7        field       tools  ...   analytics    operational\n8   scientists       field  ...   analytics  not developed\n9    analytics  scientists  ...   analytics  not developed\n10  scientists    deciders  ...  scientists    operational\n11    deciders   analytics  ...    deciders  not developed\n\n[12 rows x 5 columns]"
+  },
+  {
+    "objectID": "sig-dontpanic.html#test-graph",
+    "href": "sig-dontpanic.html#test-graph",
+    "title": "Structured intelligence governance template",
+    "section": "test graph",
+    "text": "test graph\n\n\nClick to expand\nfrom scripts.classes.sig_graph import SigGraph\n\nsig_graph = SigGraph()\n\n\nTypeError: from_pandas_edgelist() got an unexpected keyword argument 'connectionstyle'"
+  },
+  {
+    "objectID": "sig-dontpanic.html#test-vis",
+    "href": "sig-dontpanic.html#test-vis",
+    "title": "Structured intelligence governance template",
+    "section": "test vis",
+    "text": "test vis\n\n\nClick to expand\nfrom scripts.classes.sig_vis import SigVis\n\nsig_vis = SigVis()\n\n\nTypeError: from_pandas_edgelist() got an unexpected keyword argument 'connectionstyle'\n\n\n\n\nClick to expand\nsig_vis.plot_role_contexts()\n\n\nNameError: name 'sig_vis' is not defined\n\n\n\n\nClick to expand\nsig_vis.table_min_req()\n\n\nNameError: name 'sig_vis' is not defined"
+  },
+  {
+    "objectID": "sig.html#set-data-source",
+    "href": "sig.html#set-data-source",
+    "title": "Structured intelligence governance",
+    "section": "Set data source",
+    "text": "Set data source\nData source set to:\n\n\ntemplate"
+  },
+  {
+    "objectID": "sig.html#where-does-it-hurt",
+    "href": "sig.html#where-does-it-hurt",
+    "title": "Structured intelligence governance",
+    "section": "Where does it hurt?",
+    "text": "Where does it hurt?\n\nPoint at the picture where the data system hurt people."
+  },
+  {
+    "objectID": "sig.html#example-sig",
+    "href": "sig.html#example-sig",
+    "title": "Structured intelligence governance",
+    "section": "Example SIG",
+    "text": "Example SIG"
+  },
+  {
+    "objectID": "sig.html#known-universe",
+    "href": "sig.html#known-universe",
+    "title": "Structured intelligence governance",
+    "section": "Known universe",
+    "text": "Known universe\n\narrows that have agreed-upon mandates (minimum reequirements)"
   },
   {
     "objectID": "sig.html#for-analytics",
     "href": "sig.html#for-analytics",
     "title": "Structured intelligence governance",
     "section": "for analytics",
-    "text": "for analytics\n\n\n\n\n\n\n\n\nfrom\nto\nto_minimum_requirements\nstatus\n\n\n\n\ndata\nscientists\nNA\nbuggy"
-  },
-  {
-    "objectID": "sig.html#for-decision-makers",
-    "href": "sig.html#for-decision-makers",
-    "title": "Structured intelligence governance",
-    "section": "for decision makers",
-    "text": "for decision makers\n\n\n\n\n\n\n\n\nfrom\nto\nto_minimum_requirements\nstatus"
+    "text": "for analytics\n\n\n\n\n\n\n\n\nfrom\nto\nto_minimum_requirements\nstatus\n\n\n\n\ntools\nscientists\nScientists need a scientific workflow tools such as scikitlearn, as well as overlapping toolkits with analytics. Scientists need to access data via tools to ensure GDPR and other ethics concerns are adhered to.\nnot developed\n\n\nscientists\nfield\nCommunicates data collection requirements.\nnot developed\n\n\nanalytics\nscientists\nWorkflows sufficient for their arrows.\nnot developed"
   },
   {
     "objectID": "sig.html#for-scientists",
     "href": "sig.html#for-scientists",
     "title": "Structured intelligence governance",
     "section": "for scientists",
-    "text": "for scientists\n\n\n\n\n\n\n\n\nfrom\nto\nto_minimum_requirements\nstatus"
+    "text": "for scientists\n\n\n\n\n\n\n\n\nfrom\nto\nto_minimum_requirements\nstatus\n\n\n\n\nscientists\nreporting\nScientists need a reliable workflow for developing manuscripts, slides, vis, tables, and other reporting for projects.\nnot developed"
   },
   {
-    "objectID": "sig.html#test-data",
-    "href": "sig.html#test-data",
-    "title": "Structured intelligence governance template",
-    "section": "test data",
-    "text": "test data\n\n\nClick to expand\nfrom scripts.classes.sig_dat import SigDat\n\nsig_dat = SigDat()\n\n\n\n\nClick to expand\nprint(SigDat.__doc__)\n\n\n\n    Data preparation layer for SIG (Structured Intelligence Governance).\n    Focuses on loading raw data and preparing clean node and edge dataframes.\n\n    This function will not work if client_credentials/.env does not have \n    DATA_ENTRY variable set.\n    \n\n\n\n\nClick to expand\nsig_dat.__dict__\n\n\n{'_sheet_id': '1CduXAP1lUvmm-vGOKdehSp19HwchVsDoq1CLWP5MUvM', 'edges_df':           from          to  ... arrowkeeper         status\n0         data       tools  ...    automata    operational\n1        tools   reporting  ...    automata          buggy\n2   scientists   reporting  ...  scientists  not developed\n3        tools  scientists  ...   analytics  not developed\n4     projects    deciders  ...    deciders  not developed\n5    reporting    projects  ...    automata          buggy\n6        tools   analytics  ...   analytics    operational\n7        field       tools  ...   analytics    operational\n8   scientists       field  ...   analytics  not developed\n9         data       tools  ...    automata          buggy\n10   analytics  scientists  ...   analytics  not developed\n11  scientists    deciders  ...  scientists    operational\n\n[12 rows x 5 columns], 'nodes_df':          node role_context\n0   analytics       humans\n1    projects     projects\n2  scientists       humans\n3    deciders       humans\n4   reporting    reporting\n5       field       humans\n6       tools        tools\n7        data         data}\n\n\n\n\nClick to expand\nsig_dat.edges_df\n\n\n          from          to  ... arrowkeeper         status\n0         data       tools  ...    automata    operational\n1        tools   reporting  ...    automata          buggy\n2   scientists   reporting  ...  scientists  not developed\n3        tools  scientists  ...   analytics  not developed\n4     projects    deciders  ...    deciders  not developed\n5    reporting    projects  ...    automata          buggy\n6        tools   analytics  ...   analytics    operational\n7        field       tools  ...   analytics    operational\n8   scientists       field  ...   analytics  not developed\n9         data       tools  ...    automata          buggy\n10   analytics  scientists  ...   analytics  not developed\n11  scientists    deciders  ...  scientists    operational\n\n[12 rows x 5 columns]"
-  },
-  {
-    "objectID": "sig.html#test-graph",
-    "href": "sig.html#test-graph",
-    "title": "Structured intelligence governance template",
-    "section": "test graph",
-    "text": "test graph\n\n\nClick to expand\nfrom scripts.classes.sig_graph import SigGraph\n\nsig_graph = SigGraph()\n\n\nTypeError: from_pandas_edgelist() got an unexpected keyword argument 'connectionstyle'"
-  },
-  {
-    "objectID": "sig.html#test-vis",
-    "href": "sig.html#test-vis",
-    "title": "Structured intelligence governance template",
-    "section": "test vis",
-    "text": "test vis\n\n\nClick to expand\nfrom scripts.classes.sig_vis import SigVis\n\nsig_vis = SigVis()\n\n\nTypeError: from_pandas_edgelist() got an unexpected keyword argument 'connectionstyle'\n\n\n\n\nClick to expand\nsig_vis.plot_role_contexts()\n\n\nNameError: name 'sig_vis' is not defined\n\n\n\n\nClick to expand\nsig_vis.table_min_req()\n\n\nNameError: name 'sig_vis' is not defined"
+    "objectID": "sig.html#for-decision-makers",
+    "href": "sig.html#for-decision-makers",
+    "title": "Structured intelligence governance",
+    "section": "for decision makers",
+    "text": "for decision makers\n\n\n\n\n\n\n\n\nfrom\nto\nto_minimum_requirements\nstatus\n\n\n\n\nprojects\ndeciders\nDecision makers need to be able to assess the current status of the project.\nnot developed\n\n\ndeciders\nanalytics\nPriorities\nnot developed"
   },
   {
     "objectID": "sig.html#for-field",
@@ -63,52 +140,10 @@
     "text": "for field\n\n\n\n\n\n\n\n\nfrom\nto\nto_minimum_requirements\nstatus"
   },
   {
-    "objectID": "sig.html#system-overview",
-    "href": "sig.html#system-overview",
-    "title": "Structured intelligence governance template",
-    "section": "system overview",
-    "text": "system overview"
-  },
-  {
-    "objectID": "sig.html#section",
-    "href": "sig.html#section",
-    "title": "Structured intelligence governance",
+    "objectID": "index.html",
+    "href": "index.html",
+    "title": "SIG Consulting",
     "section": "",
-    "text": "Error: object 'plot_graph' not found"
-  },
-  {
-    "objectID": "sig.html#flow",
-    "href": "sig.html#flow",
-    "title": "Structured intelligence governance template",
-    "section": "flow",
-    "text": "flow\n\n\nClick to expand\nlibrary(ggraph)\nlibrary(tidygraph)\n\n\n\n\nedges_df %&gt;%\n  select(from, to, to_minimum_requirements, arrowkeeper, status) %&gt;%\n  as_tbl_graph() %&gt;%\n  activate(\"nodes\") %&gt;%\n  left_join(nodes_df, by = c(\"name\" = \"node\")) %&gt;%\n  ggraph(layout = \"linear\", circular = TRUE) +\n  geom_node_point(aes(shape = role_context),\n    size = 20, alpha = 0.1\n  ) +\n  geom_node_text(aes(label = name)) +\n  geom_edge_arc(\n    aes(linetype = arrowkeeper, color = status)\n  ) +\n  theme_minimal() +\n  theme(\n    panel.grid = element_blank(),\n    axis.ticks = element_blank(),\n    axis.text = element_blank(),\n    legend.position = \"top\",\n    legend.direction = \"vertical\"\n  ) +\n  labs(\n    title = \"Structured intelligence governance\",\n    subtitle = \"Roles and contexts\",\n    x = \"\",\n    y = \"\"\n  )"
-  },
-  {
-    "objectID": "sig.html#workflow",
-    "href": "sig.html#workflow",
-    "title": "Structured intelligence governance template",
-    "section": "workflow",
-    "text": "workflow"
-  },
-  {
-    "objectID": "sig.html#relationships",
-    "href": "sig.html#relationships",
-    "title": "Structured intelligence governance template",
-    "section": "relationships",
-    "text": "relationships"
-  },
-  {
-    "objectID": "sig.html#where-does-it-hurt",
-    "href": "sig.html#where-does-it-hurt",
-    "title": "Structured intelligence governance",
-    "section": "Where does it hurt?",
-    "text": "Where does it hurt?\n\nPoint at the picture where the data system hurt people. ’’"
-  },
-  {
-    "objectID": "sig.html#section-1",
-    "href": "sig.html#section-1",
-    "title": "Structured intelligence governance",
-    "section": "",
-    "text": "Error in `geom_node_point()`:\n! Problem while computing aesthetics.\nℹ Error occurred in the 1st layer.\nCaused by error:\n! object 'role_context' not found"
+    "text": "See blog post Arrowkeepers, assemble! about designing data systems that care about people."
   }
 ]
