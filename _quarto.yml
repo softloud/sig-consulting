@@ -1,7 +1,7 @@
 project:
   type: website
   output-dir: docs
-  title: "SIG Consulting"
+  title: "Good enough data & systems lab"
 
 format:
   html:
