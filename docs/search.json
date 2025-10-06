@@ -88,7 +88,7 @@
     "href": "sig.html#set-data-source",
     "title": "Structured intelligence governance",
     "section": "Set data source",
-    "text": "Set data source\nData source set to:\n\n\ntemplate"
+    "text": "Set data source\nData source set to:\n\n\n[1] \"template\""
   },
   {
     "objectID": "sig.html#where-does-it-hurt",
@@ -109,7 +109,7 @@
     "href": "sig.html#known-universe",
     "title": "Structured intelligence governance",
     "section": "Known universe",
-    "text": "Known universe\n\narrows that have agreed-upon mandates (minimum reequirements)"
+    "text": "Known universe\n\narrows that have agreed-upon mandates (minimum requirements)"
   },
   {
     "objectID": "sig.html#for-analytics",
@@ -145,5 +145,26 @@
     "title": "Good enough data & systems lab",
     "section": "",
     "text": "See blog post Arrowkeepers, assemble! about designing data systems that care about people."
+  },
+  {
+    "objectID": "sig.html#section",
+    "href": "sig.html#section",
+    "title": "Structured intelligence governance",
+    "section": "",
+    "text": "Error: object 'nodes_df' not found\n\n\nError: object 'nodes_df' not found\n\n\nError: object 'edges_df' not found\n\n\nError: object 'core_contexts_graph' not found"
+  },
+  {
+    "objectID": "sig.html#section-1",
+    "href": "sig.html#section-1",
+    "title": "Structured intelligence governance",
+    "section": "",
+    "text": "# A tibble: 8 × 2\n  node       node_context\n  &lt;chr&gt;      &lt;chr&gt;       \n1 analytics  humans      \n2 projects   projects    \n3 scientists humans      \n4 deciders   humans      \n5 reporting  reporting   \n6 field      humans      \n7 tools      tools       \n8 data       data        \n\n\nError in `dplyr::mutate()`:\nℹ In argument: `from = purrr::map_chr(from, private$get_node_context)`.\nCaused by error in `purrr::map_chr()`:\nℹ In index: 3.\nCaused by error:\n! Result must be length 1, not 0.\n\n\nError in SigVis(sig_graph_agg): could not find function \"SigVis\"\n\n\nError: object 'agg_vis' not found\n\n\n\n\n## {.stretch}\n\n\n::: {.cell}\n::: {.cell-output .cell-output-error}\n\nError: object ‘nodes_df’ not found\n\n\n:::\n\n::: {.cell-output .cell-output-error}\n\nError: object ‘nodes_df’ not found\n\n\n:::\n\n::: {.cell-output .cell-output-error}\n\nError: object ‘edges_df’ not found\n\n\n:::\n\n::: {.cell-output .cell-output-error}\n\nError: object ‘core_contexts_graph’ not found\n\n\n:::\n:::\n\n\n\n# Minimum requirements to fulfill \n\n## for analytics\n\n\n::: {.cell}\n::: {.cell-output .cell-output-error}\n\nError: object ‘edges_df’ not found\n\n\n:::\n:::\n\n\n## for scientists\n\n\n::: {.cell}\n::: {.cell-output .cell-output-error}\n\nError: object ‘edges_df’ not found\n\n\n:::\n:::\n\n\n## for decision makers\n\n\n::: {.cell}\n::: {.cell-output .cell-output-error}\n\nError: object ‘edges_df’ not found\n\n\n:::\n:::\n\n\n## for field\n\n\n::: {.cell}\n::: {.cell-output .cell-output-error}\n\nError: object ‘edges_df’ not found\n\n\n:::\n:::\n\n\n\n## {.stretch}\n\n\n::: {.cell}\n::: {.cell-output .cell-output-error}\n\nError: object ‘nodes_df’ not found ```\n::: :::"
+  },
+  {
+    "objectID": "sig.html#section-2",
+    "href": "sig.html#section-2",
+    "title": "Structured intelligence governance",
+    "section": "",
+    "text": "Error: object 'nodes_df' not found"
   }
 ]

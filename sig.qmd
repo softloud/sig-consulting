@@ -9,7 +9,7 @@ format:
 
 Data source set to: 
 
-```{python, python_parameters}
+```{r set_parameters}
 #| tags: [parameters]
 
 data_source="template"
@@ -17,19 +17,22 @@ print(data_source)
 
 ```
 
+```{r}
+source("scripts/R/sig_dat.R")
+source("scripts/R/sig_graph.R")
+source("scripts/R/sig_vis.R")
+
+```
+
+```{r}
+library(ggraph)
+library(tidygraph)
+
+```
 
 ## Where does it hurt?
 
 > Point at the picture where the data system hurt people.
-
-```{python}
-
-from scripts.classes.sig_graph import SigDat
-
-# sig_dat = SigDat(data_source="template")
-sig_dat = SigDat(data_source=data_source)
-
-```
 
 ---
 
@@ -39,77 +42,40 @@ sig_dat = SigDat(data_source=data_source)
 
 ![](img/sis-template.png)
 
+
 ## Known universe
 
-- arrows that have agreed-upon mandates (minimum reequirements)
+- arrows that have agreed-upon mandates (minimum requirements)
 
-```{python}
-
-# but ugh graphs fiddly in object oriented, load into R to play
-
-# write data from python to R
-sig_dat.edges_df.to_csv('local-data/edges.csv')
-sig_dat.nodes_df.to_csv('local-data/nodes.csv')
-
-```
-
-```{r}
-library(tidyverse)
-edges_df <- read_csv("local-data/edges.csv") |> select(-"...1")
-nodes_df <- read_csv("local-data/nodes.csv") |> select(-"...1")
-
-# head(edges_df)
-# head(nodes_df)
-
-```
 
 ```{r}
 # wrangle into graph data for R
 
-library(ggraph)
-library(tidygraph)
+sig_dat <- SigDat$new(source = data_source)
+sig_graph <- SigGraph$new(sig_dat = sig_dat)
 
-plot_graph <- edges_df %>%
-  select(from, to, to_minimum_requirements, arrowkeeper, status) %>%
-  as_tbl_graph() %>%
-  activate("nodes") %>%
-  left_join(nodes_df, by = c("name" = "node")) %>%
-  mutate(
-    object = if_else(node_context == "humans", node_context, "not human")
-  )
+
+plot_graph <- sig_graph$graph
+
+sig_vis <- SigVis$new(sig_graph = sig_graph)
+
+
 
 ```
+  
 
 # system overview
-
+  
 ## {.stretch}
 
 ```{r}
-#| fig-width: 12
-#| fig-height: 8
+  #| fig-width: 12
+  #| fig-height: 8
 
-
-plot_graph %>%
-  ggraph() +
-  geom_edge_fan(
-    aes(linetype = arrowkeeper, color = status),
-    alpha = 0.8
-  ) +
-  geom_node_point(aes(shape = object),
-    size = 20, alpha = 0.1
-  ) +
-  geom_node_text(aes(label = name)) +
-  theme_minimal(
-    base_size = 15
-  ) +
-  theme(
-    panel.grid = element_blank(),
-    axis.ticks = element_blank(),
-    axis.text = element_blank()
-  ) +
+sig_vis$plot() +
   labs(
     title = "Structured intelligence governance",
-    subtitle = "Roles and contexts",
+    subtitle = "Everything",
     x = "",
     y = ""
   )
@@ -118,75 +84,31 @@ plot_graph %>%
 ```
 
 
-## {.stretch}
+## {.stretch} 
 
 ```{r}
-#| fig-width: 12
-#| fig-height: 8
+```{r}
+  #| fig-width: 12
+  #| fig-height: 8
 
-set_aggregation <- function(node) {
-  if (node %in% nodes_df$node_context) {
-    node_context <- node
-  } else {
-    node_context <- nodes_df$node_context[nodes_df$node == node]
-  }
+context_graph <- SigGraph$new(sig_dat = sig_dat)
 
-  return(node_context)
-}
-
-node_context_nodes <- nodes_df %>%
-  select(node = node_context) %>%
-  distinct() %>%
-  mutate(node_context = node)
-
-aggregate_nodes <- nodes_df %>%
-  full_join(node_context_nodes, by = c("node", "node_context"))
+context_graph$set_aggregation("node_context")
 
 
-core_contexts_graph <- edges_df %>%
-  mutate(
-    # replace anything that's not in node_contexts with it
-    # reduces to node_context unique values
-    from = map_chr(from, set_aggregation),
-    to = map_chr(to, set_aggregation)
-  ) %>%
-  as_tbl_graph() %>%
-  activate("nodes") %>%
-  left_join(aggregate_nodes, by = c("name" = "node")) %>%
-  mutate(
-    object = if_else(node_context == "humans", node_context, "not human")
-  )
+agg_vis <- SigVis$new(sig_graph = context_graph)
 
-
-core_contexts_graph %>%
-  ggraph(circular = TRUE) +
-  geom_edge_fan(
-    aes(linetype = arrowkeeper, color = status),
-    alpha = 0.8
-  ) +
-  geom_node_point(
-    aes(shape = object),
-    size = 20,
-    alpha = 0.1
-  ) +
-  geom_node_text(aes(label = name)) +
-  theme_minimal(
-    base_size = 15
-  ) +
-  theme(
-    panel.grid = element_blank(),
-    axis.ticks = element_blank(),
-    axis.text = element_blank()
-  ) +
+agg_vis$plot() +
   labs(
     title = "Structured intelligence governance",
-    subtitle = "Dimension reducded to node contexts",
+    subtitle = "Contexts",
     x = "",
     y = ""
   )
 
 
 ```
+
 
 
 # Minimum requirements to fulfill 
@@ -196,7 +118,7 @@ core_contexts_graph %>%
 ```{r}
 library(gt)
 
-edges_df %>%
+sig_graph$edges %>%
   filter(arrowkeeper == "analytics", status != "operational") %>%
   select(-arrowkeeper) %>%
   gt()
@@ -207,7 +129,7 @@ edges_df %>%
 
 ```{r}
 
-edges_df %>%
+sig_graph$edges %>%
   filter(arrowkeeper == "scientists", status != "operational") %>%
   select(-arrowkeeper) %>%
   gt()
@@ -218,7 +140,7 @@ edges_df %>%
 
 ```{r}
 
-edges_df %>%
+sig_graph$edges %>%
   filter(arrowkeeper == "deciders", status != "operational") %>%
   select(-arrowkeeper) %>%
   gt()
@@ -229,7 +151,7 @@ edges_df %>%
 
 ```{r}
 
-edges_df %>%
+sig_graph$edges %>%
   filter(arrowkeeper == "field", status != "operational") %>%
   select(-arrowkeeper) %>%
   gt()
@@ -237,43 +159,3 @@ edges_df %>%
 
 ```
 
-
-## {.stretch}
-
-```{r}
-#| fig-width: 12
-#| fig-height: 8
-
-library(ggraph)
-library(tidygraph)
-
-
-plot_graph %>%
-  as_tbl_graph() %>%
-  activate("nodes") %>%
-  left_join(nodes_df, by = c("name" = "node")) %>%
-  ggraph(layout = "linear", circular = TRUE) +
-  geom_node_point(aes(shape = object),
-    size = 20, alpha = 0.1
-  ) +
-  geom_node_text(aes(label = name)) +
-  geom_edge_arc(
-    aes(linetype = arrowkeeper, color = status)
-  ) +
-  theme_minimal(
-    base_size = 15
-  ) +
-  theme(
-    panel.grid = element_blank(),
-    axis.ticks = element_blank(),
-    axis.text = element_blank()
-  ) +
-  labs(
-    title = "Structured intelligence governance",
-    subtitle = "Relationships",
-    x = "",
-    y = ""
-  )
-
-
-```
